@@ -1,0 +1,118 @@
+{
+    "logging": {
+        "files": {
+            "enabled":false,
+            "level": "error",
+            "directory": "logs",
+            "flushInterval": 5
+        },
+        "console": {
+            "level": "info",
+            "colors": true
+        }
+    },
+    "payments": {
+        "enabled": true,
+        "interval": 300,
+        "maxAddresses": 15,
+        "mixin": 1,
+        "priority": 0,
+        "transferFee": 15,
+        "dynamicTransferFee": true,
+        "minerPayFee" : true,
+        "minPayment": 10000,
+        "networkFee":0,
+        "minPaymentExchangeAddress":10000,
+        "maxTransactionAmount": 1000000,
+        "denomination": 100
+    },
+    "blockUnlocker": {
+        "enabled": true,
+        "interval": 600,
+        "depth": 60,
+        "reward":0
+    },
+    "api": {
+        "enabled": true,
+        "hashrateWindow": 600,
+        "updateInterval": 10,
+        "port": 8001,
+        "bindIp":"0.0.0.0",
+        "blocks": 30,
+        "payments": 30,
+        "password": "password",
+        "ssl": {
+            "enabled":false,
+            "port": 2889,
+            "cert": "./cert.pem",
+            "key": "./privkey.pem",
+            "ca": "./chain.pem"
+        },
+        "trustProxyIP": false
+    },
+    "monitoring": {
+        "daemon": {
+            "checkInterval": 900,
+            "rpcMethod": "getblockcount"
+        },
+        "wallet": {
+            "checkInterval": 900,
+            "rpcMethod": "getbalance"
+        }
+    },
+    "charts": {
+        "blocks":{
+            "enabled":true,
+            "days":30
+        },
+        "pool": {
+            "difficulty": {
+                "enabled": true,
+                "updateInterval": 60,
+                "stepInterval": 1800,
+                "maximumPeriod": 86400
+            },
+            "hashrate": {
+                "enabled": true,
+                "updateInterval": 60,
+                "stepInterval": 1800,
+                "maximumPeriod": 86400
+            },
+            "workers": {
+                "enabled": true,
+                "updateInterval": 60,
+                "stepInterval": 1800,
+                "maximumPeriod": 86400
+            },
+            "miners": {
+                "enabled": true,
+                "updateInterval": 60,
+                "stepInterval": 1800,
+                "maximumPeriod": 86400
+            },
+            "price": {
+                "enabled": true,
+                "updateInterval": 1800,
+                "stepInterval": 10800,
+                "maximumPeriod": 604800
+            }
+        },
+        "user": {
+            "worker_hashrate": {
+                "enabled": true,
+                "updateInterval": 180,
+                "stepInterval": 1800,
+                "maximumPeriod": 86400
+            },
+            "hashrate": {
+                "enabled": true,
+                "updateInterval": 180,
+                "stepInterval": 1800,
+                "maximumPeriod": 86400
+            },
+            "payments": {
+                "enabled": true
+            }
+        }
+    }
+}
