@@ -30,12 +30,15 @@ const logSystem = 'init';
  **/
 const args = require("args-parser")(process.argv);
 
-global.config = require('./lib/bootstrap')(args.config || 'config.json');
+global.config = require('./lib/core/bootstrap')(args.config || 'config.json');
+
+global.CoinCollection = require('./lib/core/CoinCollection')(args.coin);
+
 require('./lib/logger.js');
 const em = require('./lib/event_manager');
 global.EventManager = new em();
 
-const validModules = ['pool', 'api', 'unlocker', 'payments', 'charts','rpcbalancer'];
+const validModules = ['pool', 'api', 'unlocker', 'payments', 'charts'];
 //,'rpcbalancer'];
 
 global.redisClient = require('redis').createClient((function(){

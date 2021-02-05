@@ -26,7 +26,7 @@
         "node": "14.x"
     },
     "devDependencies": {
-        "ava": "^3.10.1"
+        "ava": "^3.15.0"
     },
     "scripts": {
         "api": "node init.js --module=api",
