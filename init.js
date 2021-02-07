@@ -21,6 +21,7 @@
  */
 
 const fs = require('fs');
+const path = require('path');
 const cluster = require('cluster');
 const os = require('os');
 
@@ -31,10 +32,9 @@ const logSystem = 'init';
  **/
 const args = require("args-parser")(process.argv);
 
-global.config = require('./lib/core/bootstrap')(args.config || 'config.json');
+global.config = require('./lib/core/bootstrap')(args.coins ? args.coins.split(',') : ['scala'], path.join(process.cwd(), 'config'));
 const ModuleSpawner = require('./lib/core/ModuleSpawner');
 
-global.CoinCollection = require('./lib/core/CoinCollection')(args.coin);
 
 require('./lib/logger.js');
 const em = require('./lib/event_manager');
