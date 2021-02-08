@@ -1,16 +1,18 @@
-#Configuration Version 1 (avaliable for 1.5.0 and below)
+#Configuration Version 2 (avaliable for 1.5.1 and above)
 
-Copy the `default/config.default.json` file to `config.json` then overview each options and change any to match your preferred setup.
+Each configuration will be autoload from `/config` folder. There are 2 types of json file, and also coin related.
 
-### Global Options
+* [Global Configuration](#global-configuration)
 
-| Parameter | Details |
-| --------- | ------- |
-| coin | Used for storage in redis so multiple coins can share the same redis instance. |
-| symbol | Used for front-end display. |
-| coinUnits | Minimum units in a single coin, see COIN constant in DAEMON_CODE/src/cryptonote_config.h |
-| coinDecimalPlaces | Number of coin decimals places for notifications and front-end. |
-| coinDifficultyTarget | Coin network time to mine one block, see DIFFICULTY_TARGET constant in DAEMON_CODE/src/cryptonote_config.h |
+* *  [Logging Options](#logging-options)
+
+* [Coin Configuration](#coin-configuration)
+
+
+##Global configuration
+
+Copy the `default/config.json` file to `config/config.json` then overview each options and change any to match your preferred setup.
+
 
 ### Logging Options
 
@@ -205,15 +207,6 @@ For each parameters group you can set the following parameters:
 | checkInterval | Interval of sending rpcMethod request. |
 | rpcMethod | The RPC method name. |
 
-### StellitePay Integrations (only avaliable at v1.4.9)
-Integrate mining directly to StellitePay.
-
-| Parameter | Details |
-| --------- | ------- |
-| stellitepay.enable | Enable integrations |
-| stellitepay.merchant_key | Key obtain from StellitePay Administrator |
-| stellitepay.url | URL for StellitePay API (default: https://api.stellitepay.com). |
-| stellitepay.version | API version |
 
 ### Market prices
 Prices settings for market and price charts.
@@ -269,3 +262,15 @@ Edit the variables in the `website/config.js` file to use your pool's specific c
 | window.config.transactionExplorer | The URL to get details for a transaction hash. |
 | window.config.defaultLang | The default pool interface language. |
 | window.config.themeCss | The css use for pool theme. |
+
+
+### Global Options
+
+| Parameter | Details |
+| --------- | ------- |
+| coin | Used for storage in redis so multiple coins can share the same redis instance. |
+| symbol | Used for front-end display. |
+| coinUnits | Minimum units in a single coin, see COIN constant in DAEMON_CODE/src/cryptonote_config.h |
+| coinDecimalPlaces | Number of coin decimals places for notifications and front-end. |
+| coinDifficultyTarget | Coin network time to mine one block, see DIFFICULTY_TARGET constant in DAEMON_CODE/src/cryptonote_config.h |
+

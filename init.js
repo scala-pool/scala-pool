@@ -1,4 +1,5 @@
-/* Stellite Nodejs Pool
+/* Scala Pool
+ * Copyright Scala-network	<https://github.com/scala-network/scala-pool>
  * Copyright StelliteCoin	<https://github.com/stellitecoin/cryptonote-stellite-pool>
  * Copyright Ahmyi			<https://github.com/ahmyi/cryptonote-stellite-pool>
  * Copyright Dvandal    	<https://github.com/dvandal/cryptonote-nodejs-pool>
@@ -20,6 +21,7 @@
  */
 
 const fs = require('fs');
+const path = require('path');
 const cluster = require('cluster');
 const os = require('os');
 
@@ -30,16 +32,16 @@ const logSystem = 'init';
  **/
 const args = require("args-parser")(process.argv);
 
-global.config = require('./lib/core/bootstrap')(args.config || 'config.json');
-
-global.CoinCollection = require('./lib/core/CoinCollection')(args.coin);
+require('./lib/core/bootstrap')(args.coins ? args.coins.split(',') : ['scala'], path.join(process.cwd(), 'config'));
 
 require('./lib/logger.js');
+/**
+ *	Initiate event manager
+**/
 const em = require('./lib/event_manager');
 global.EventManager = new em();
 
-const validModules = ['pool', 'api', 'unlocker', 'payments', 'charts'];
-//,'rpcbalancer'];
+const ModuleSpawner = require('./lib/core/ModuleSpawner');
 
 global.redisClient = require('redis').createClient((function(){
 	const options = { 
@@ -78,230 +80,21 @@ global.redisClient.on('error', function (err) {
     log('error', logSystem, "Error on redis with code : %s",[err.code]);
 });
 
-// Load pool modules
-if (cluster.isWorker){
-    switch(process.env.workerType){
-        case 'pool':
-            require('./lib/pool.js');
-            break;
-        case 'poolWorker':
-            require('./lib/pool/worker.js');
-            break;
-        case 'listener':
-            break;
-        case 'unlocker':
-            require('./lib/blockUnlocker.js');
-            break;
-        case 'payments':
-            require('./lib/paymentProcessor.js');
-            break;
-        case 'api':
-            require('./lib/api.js');
-	    break;
-        case 'charts':
-            require('./lib/chartsDataCollector.js');
-            break;
-        default:
-        	console.error(`Invalid worker type ${process.env.workerType}`)
-    }
-    return;
-}
-
 require('./lib/exceptionWriter.js')(logSystem);
+
+if(ModuleSpawner.attach()) return;
+
 
 // Pool informations
 log('info', logSystem, 'Starting Scala Node.JS pool version %s', [global.config.version]);
 
-
-const createWorker = function(workerType, forkId){
-    const worker = cluster.fork({
-        workerType: workerType,
-        forkId: forkId
-    });
-    worker.forkId = forkId;
-    worker.type = 'pool';
-    worker.on('exit', function(code, signal){
-        log('error', logSystem, '%s fork %s died, spawning replacement worker...', [workerType, forkId]);
-        setTimeout(function(){
-            createWorker(workerType, forkId);
-        }, global.config.poolServer.timeout || 2000);
-    }).on('message', function(msg){
-        switch(msg.type){
-        	case 'statsCollector':
-        		Object.keys(cluster.workers).forEach(function(id) {
-                    if (cluster.workers[id].type === 'api'){
-                        cluster.workers[id].send({type: 'statsCollector', data: msg.data});
-                    }
-                });	
-        	break
-            case 'banIP':
-                Object.keys(cluster.workers).forEach(function(id) {
-                    if (cluster.workers[id].type === 'pool'){
-                        cluster.workers[id].send({type: 'banIP', ip: msg.ip});
-                    }
-                });
-                break;
-            case 'blockTemplate':
-            	Object.keys(cluster.workers).forEach(function(id) {
-                    if (cluster.workers[id].type === 'pool'){
-                        cluster.workers[id].send({type: 'blockTemplate', block: msg.block});
-                    }
-                });
-               break;
-            case 'jobRefresh':
-            	Object.keys(cluster.workers).forEach(function(id) {
-                    if (cluster.workers[id].type === 'poolWorker'){
-                        cluster.workers[id].send({type: 'jobRefresh'});
-                    }
-                });
-            	break;
-        }
-    });
-};
 /**
  * Start modules
  **/
 (function(){
-	/**
-	 * Spawn pool workers module
-	 **/
-	function spawnPoolWorkers(){
-	    if (!config.poolServer || !config.poolServer.enabled) {
-	    	return;
-	    }
-	    
-	    if (!config.poolServer.ports || config.poolServer.ports.length === 0){
-	        log('error', logSystem, 'Pool server enabled but no ports specified');
-	        return;
-	    }
-	
-	    const numForks = (function(){
-	        if (!config.poolServer.clusterForks){
-	            return 1;
-	        }
-	        if (global.config.poolServer.clusterForks === 'auto'){
-	            return os.cpus().length;
-	        }
-	        if (isNaN(config.poolServer.clusterForks)){
-	            return 1;
-	        }
-	        return global.config.poolServer.clusterForks;
-	    })();
-	
-	
-	    let i = 0;
-	    createWorker('poolWorker', 0);
-	    setTimeout(() => {
-	    	let spawnInterval = setInterval(function(){
-				i++;
-		        if (i -1 === numForks){
-		        	log('info', logSystem, 'Pool spawned on %d thread(s)', [numForks]);
-		            clearInterval(spawnInterval);
-					return;
-		        }
-		       	createWorker('pool', i.toString());
-		    }, 10);
-	    },20)
-	    
-	}
-	
-	/**
-	 * Spawn block unlocker module
-	 **/
-	function spawnBlockUnlocker(){
-	    if (!config.blockUnlocker || !config.blockUnlocker.enabled) {
-	    	return;
-	    }
-	
-	    var worker = cluster.fork({
-	        workerType: 'unlocker'
-	    });
-	    worker.on('exit', function(code, signal){
-	        log('error', logSystem, 'Block unlocker died, spawning replacement...');
-	        setTimeout(function(){
-	            spawnBlockUnlocker();
-	        }, 2000);
-	    });
-	}
-	
-	/**
-	 * Spawn payment processor module
-	 **/
-	function spawnPaymentProcessor(){
-	    if (!config.payments || !config.payments.enabled) {
-	    	return;
-	    }
-	
-	    var worker = cluster.fork({
-	        workerType: 'payments'
-	    });
-	    worker.on('exit', function(code, signal){
-	        log('error', logSystem, 'Payment processor died, spawning replacement...');
-	        setTimeout(function(){
-	            spawnPaymentProcessor();
-	        }, 2000);
-	    });
-	}
-	
-	/**
-	 * Spawn API module
-	 **/
-	function spawnApi(){
-		if (!global.config.api || !global.config.api.enabled) {
-	    	return;
-	    }
-	    
-	    const numForks = (function(){
-	        if (!global.config.api.clusterForks){
-	            return 1;
-	        }
-	        if (global.config.api.clusterForks === 'auto'){
-	            return os.cpus().length;
-	        }
-	        if (isNaN(config.api.clusterForks)){
-	            return 1;
-	        }
-	        return global.config.api.clusterForks;
-	    })();
-	
-	
-	    
-	    let i = 0;
-	 // createWorker('apiWorker',0);
-	    setTimeout(() => {
-	    	let spawnInterval = setInterval(function(){
-				i++;
-		        if (i -1 === numForks){
-		        	log('info', logSystem, 'Api spawned on %d thread(s)', [numForks]);
-		            clearInterval(spawnInterval);
-					return;
-		        }
-		       	createWorker('api', i.toString());
-		    }, 10);
-	    },20)
 
-	}
-	
-	/**
-	 * Spawn charts data collector module
-	 **/
-	function spawnChartsDataCollector(){
-	    if (!config.charts) return;
-	
-	    var worker = cluster.fork({
-	        workerType: 'charts'
-	    });
-	    worker.on('exit', function(code, signal){
-	        log('error', logSystem, 'chartsDataCollector died, spawning replacement...');
-	        setTimeout(function(){
-	            spawnChartsDataCollector();
-	        }, 2000);
-	    });
-	}
-	
-	
-    	 
 	const init = function(){
+		const validModules = ModuleSpawner.validModules;
 		const reqModules = (function(){
 			if(!args.module){
 				return validModules;
@@ -330,32 +123,29 @@ const createWorker = function(workerType, forkId){
         for(let i in reqModules){
         	switch(reqModules[i]){
 	            case 'pool':
-	                spawnPoolWorkers();
-	                break;
-	            case 'unlocker':
-	                spawnBlockUnlocker();
-	                break;
 	            case 'payments':
-	                spawnPaymentProcessor();
-	                break;
+	            case 'unlocker':
+	            	if(Object.keys(CoinCollection).length <= 0) {
+	            		log("error",logSystem,"No coins avaliable for collection. \n\nShutting down");
+	            		process.exit();
+	            	}
+	            	for(let [alias, coin] of Object.entries(CoinCollection)) {
+	            		log('info', logSystem, `Spawning ${reqModules[i]} module for coin ${alias}`);
+						ModuleSpawner.spawn(reqModules[i], coin.Config[reqModules[i]]);
+	            	}
+	        		listenersKey.push(reqModules[i]);
+	            	break;
 	            case 'api':
-	                spawnApi();
-	                break;
 	            case 'charts':
-	                spawnChartsDataCollector();
-	                break;
+	            case 'web':
+					ModuleSpawner.spawn(reqModules[i], global.config[reqModules[i]]);
+	        		listenersKey.push(reqModules[i]);
+	            	break;
 	            default:
 	            	key = false;
 	            	break;
 	        }
-	        if(key) {
-	        	listenersKey.push(reqModules[i]);
-	        }
         }
-        
-	global.config.listenerKey = listenersKey;
-
-    
     };
     
     /**

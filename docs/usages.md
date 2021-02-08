@@ -14,35 +14,49 @@
 Usage
 ===
 
-#### Requirements
-* Coin daemon(s) (find the coin's repo and build latest version from source)
-* [Node.js](http://nodejs.org/) v8.0+
+#### Requirements @ Dependencies
+
+* **Coin daemon(s)** (find the coin's repo and build latest version from source)
+* **[Node.js](http://nodejs.org/) v14.0**
   * For Ubuntu: 
  ```
 	sudo apt-get update
 	sudo apt-get install build-essential libssl-dev
-	curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.35.3/install.sh | bash
+	curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.37.2/install.sh | bash
 	source ~/.profile
-	nvm install stable
-	nvm alias default stable
+	nvm install 14
+	nvm alias default 14
 	nvm use default
 ```
-* [Redis](http://redis.io/) key-value store v2.6+ 
+
+* **Key Value Store** there are 2 options you can try either the original
+[Redis](http://redis.io/) key-value store v2.6+ 
   * For Ubuntu: 
 ```
 	sudo add-apt-repository ppa:chris-lea/redis-server
 	sudo apt-get update
 	sudo apt-get install redis-server
  ```
-* libssl required for the node-multi-hashing module
+or you can get crazy by using KeyDB a redis fork
+
+* [KeyDB](https://keydb.dev/) redis fork v5.0+
+  * For Ubuntu: 
+```
+  sudo curl -s --compressed -o /etc/apt/trusted.gpg.d/keydb.gpg https://download.keydb.dev/keydb-ppa/keydb.gpg
+  sudo curl -s --compressed -o /etc/apt/sources.list.d/keydb.list https://download.keydb.dev/keydb-ppa/keydb.list
+  sudo apt update
+  sudo apt install keydb
+ ```
+
+[**warning**](http://redis.io/topics/security): It'sa good idea to learn about and understand software that
+you are using - a good place to start with redis @ keydb is [data persistence](http://redis.io/topics/persistence).
+
+* **libssl** required for the node-multi-hashing module
   * For Ubuntu: `sudo apt-get install libssl-dev`
 
-* Boost is required for the cryptoforknote-util module
+* **Boost** is required for the cryptoforknote-util module
   * For Ubuntu: `sudo apt-get install libboost-all-dev`
 
-
-[**Redis warning**](http://redis.io/topics/security): It'sa good idea to learn about and understand software that
-you are using - a good place to start with redis is [data persistence](http://redis.io/topics/persistence).
 
 **Do not run the pool as root** : create a new user without ssh access to avoid security issues :
 ```bash
@@ -66,16 +80,21 @@ Clone the repository and run `npm update` for all the dependencies to be install
 
 #### 2) Configuration
 
-Copy the `default/config.default.json` file of your choice to `config.json` then overview each options and change any to match your preferred setup. To see avaliable config go to [table](config.md).
+If you're using 1.5.0 and below then copy the `default/config.default.json` file of your choice to `config.json` then overview each options and change any to match your preferred setup. To see avaliable config go to [table](config.md). If you are using 1.5.1, here how things get weird.
 
+* **2 Config files** Starting from version 1.5.1 we will be having 2 config files. 1 for non coin related configurations and another for coin related configurations. 
+* **Special config folder** Starting from version 1.5.1 any config dumped into /config will be automatically attached. So if you have multiple coins in that folder then just dump it. This is the default you still can run only 1 coin per session as before. [Start the pool instruction will tell more about it](#3-start-the-pool).
+
+Heads up to [config2.md](./config.md) for config version 2 details and explaination.
 
 #### 3) Start the pool
 
+Here is the basic how to start it. This will run every coin inside `/config`.
 ```bash
 	node init.js
 ```
 
-The file `config.json` is used by default but a file can be specified using the `-config=file` command argument, for example:
+Before version 1.5.1 the file `config.json` is used by default other than that will use `/config/config.json`. You can override the path of the config file by specifying the `-config=file` command argument, for example:
 
 ```bash
 	node init.js -config=config_backup.json
@@ -87,8 +106,11 @@ This software contains four distinct modules:
 * `unlocker` - Processes block candidates and increases miners' balances when blocks are unlocked
 * `payments` - Sends out payments to miners according to their balances stored in redis
 
+After version 1.5.1, there is an additional module
+* `web` - For developers to test run pool web interface without using other web services such as nginx
 
-By default, running the `init.js` script will start up all four modules. You can optionally have the script start
+
+By default, running the `init.js` script will start up all modules. You can optionally have the script start
 only start a specific module by using the `-module=name` command argument, for example:
 
 ```bash
@@ -115,6 +137,21 @@ Then enable and start the service with the following commands :
 sudo systemctl enable scala-pool.service
 sudo systemctl start scala-pool.service
 ```
+
+As of version 1.5.1, there will be multiple coin and algorithm functionallity. We bring back multiple coins so that we have various feedbacks on bugs and error to obtain stability.
+Running a spesific coin, the argument to be used is `-coins=scala`. You can have multiple coin defines but make sure config is avaliable. Below shows init pool with multiple coins.
+
+```bash
+  node init.js -config=config.json -coins=scala,zano,xmr,msr,loki
+```
+
+Well you don't need all if you're just hosting a single coin, just use as below:
+
+
+```bash
+  node init.js -config=config.json -coins=scala
+```
+
 
 #### 4) Host the front-end
 

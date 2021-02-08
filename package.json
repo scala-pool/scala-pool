@@ -1,6 +1,6 @@
 {
     "name": "scala-pool",
-    "version": "1.5.0",
+    "version": "1.5.1",
     "license": "GPL-2.0",
     "author": "@scalahq",
     "repository": {
@@ -33,9 +33,10 @@
         "comms": "node init.js --module=comms",
         "lint": "npx eslint --config .eslint.js",
         "payments": "node init.js --module=payments",
-        "pool": "node init.js --module=pool",
+        "pool": "node init.js --module=pool --coins=scala",
         "remote": "node init.js --module=remote",
         "test": "npx ava",
-        "unlocker": "node init.js --module=unlocker"
+        "unlocker": "node init.js --module=unlocker",
+	"web": "node init.js --module=web"
     }
 }
