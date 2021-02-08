@@ -9,7 +9,7 @@ global.log = x => {};
 
 const header = '0c0caeefd0800624d2492783c90e3841b1add5f251fea132feba069debab796cddc00cc4bf6ed700000000';
 test.before(t => {
-	const configFile = path.join(process.cwd(),"config",'Scala.json');
+	const configFile = path.join(process.cwd(),"config",'scala.json');
 	const config = JSON.parse(fs.readFileSync(configFile));
 	const Coin1 = require(process.cwd()+'/lib/coins/Test');
 	const coin1 = new Coin1(config);

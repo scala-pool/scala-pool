@@ -4,7 +4,7 @@ const fs = require('fs');
 const Miner = require(process.cwd()+'/lib/pool/Miner');
 global.log = x => {};
 test.before(t => {
-	const configFile = path.join(process.cwd(),"config",'Scala.json');
+	const configFile = path.join(process.cwd(),"config",'scala.json');
 	const config = JSON.parse(fs.readFileSync(configFile));
 	const Coin = require(process.cwd()+'/lib/coins/Scala');
 	const coin = new Coin(config);
