@@ -32,14 +32,16 @@ const logSystem = 'init';
  **/
 const args = require("args-parser")(process.argv);
 
-global.config = require('./lib/core/bootstrap')(args.coins ? args.coins.split(',') : ['scala'], path.join(process.cwd(), 'config'));
-const ModuleSpawner = require('./lib/core/ModuleSpawner');
-
+require('./lib/core/bootstrap')(args.coins ? args.coins.split(',') : ['scala'], path.join(process.cwd(), 'config'));
 
 require('./lib/logger.js');
+/**
+ *	Initiate event manager
+**/
 const em = require('./lib/event_manager');
 global.EventManager = new em();
 
+const ModuleSpawner = require('./lib/core/ModuleSpawner');
 
 global.redisClient = require('redis').createClient((function(){
 	const options = { 
@@ -122,11 +124,21 @@ log('info', logSystem, 'Starting Scala Node.JS pool version %s', [global.config.
         	switch(reqModules[i]){
 	            case 'pool':
 	            case 'payments':
+	            case 'unlocker':
+	            	if(Object.keys(CoinCollection).length <= 0) {
+	            		log("error",logSystem,"No coins avaliable for collection. \n\nShutting down");
+	            		process.exit();
+	            	}
+	            	for(let [alias, coin] of Object.entries(CoinCollection)) {
+	            		log('info', logSystem, `Spawning ${reqModules[i]} module for coin ${alias}`);
+						ModuleSpawner.spawn(reqModules[i], coin.Config[reqModules[i]]);
+	            	}
+	        		listenersKey.push(reqModules[i]);
+	            	break;
 	            case 'api':
 	            case 'charts':
 	            case 'web':
-	            case 'unlocker':
-					ModuleSpawner.spawn(reqModules[i], global.config);
+					ModuleSpawner.spawn(reqModules[i], global.config[reqModules[i]]);
 	        		listenersKey.push(reqModules[i]);
 	            	break;
 	            default:
