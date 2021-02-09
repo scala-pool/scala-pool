@@ -114,7 +114,7 @@ By default, running the `init.js` script will start up all modules. You can opti
 only start a specific module by using the `-module=name` command argument, for example:
 
 ```bash
-	node init.js -module=api
+	node init.js --module=api
 ```
 alternatively you can run `npm run <module>`
 ```bash
@@ -123,7 +123,7 @@ alternatively you can run `npm run <module>`
 or running multiple certain module
 
 ```bash
-	node init.js -module=api,charts,payments
+	node init.js --module=api,charts,payments
 ```
 
 [Example screenshot](http://i.imgur.com/SEgrI3b.png) of running the pool in single module mode with tmux.
@@ -142,14 +142,20 @@ As of version 1.5.1, there will be multiple coin and algorithm functionallity. W
 Running a spesific coin, the argument to be used is `-coins=scala`. You can have multiple coin defines but make sure config is avaliable. Below shows init pool with multiple coins.
 
 ```bash
-  node init.js -config=config.json -coins=scala,zano,xmr,msr,loki
+  node init.js --config=config.json --coins=scala,zano,xmr,msr,loki
 ```
 
 Well you don't need all if you're just hosting a single coin, just use as below:
 
 
 ```bash
-  node init.js -config=config.json -coins=scala
+  node init.js --config=config.json --coins=scala
+```
+
+
+If you have installed dev dependencies, you can automatically restart your application when file changes in lib are detected using nodemon. Below are for development only:
+```bash
+  nodemon init.js -a "--module=api,charts,payments" --watch config --watch lib
 ```
 
 
@@ -157,9 +163,27 @@ Well you don't need all if you're just hosting a single coin, just use as below:
 
 Simply host the contents of the `public` directory on file server capable of serving simple static files.
 
+As of version 1.5.1, you can run node web service. This is
+intentionally for development purposes only. To run the development web services:
+
+```bash
+  node init.js --module=web --port=80
+```
+
+or for some quick hand:
+
+```bash
+  npm run web
+```
 
 Edit the variables in the `public/config.js` file to use your pool's specific configuration.
-Variable explanations:
+
+If you have difficulty running web at port 80 its because we are not root. So to run as root do as below:
+
+```bash
+sudo `which node` init.js --module=web --port=80
+````
+
 
 ```javascript
 
@@ -197,6 +221,7 @@ var themeCss = "themes/light.css";
 var defaultLang = 'en';
 
 ```
+
 
 #### 5) Customize your website
 
@@ -297,6 +322,6 @@ pm2 start init.js --name=pool -- --module=pool
 pm2 start init.js --name=api -- --module=api,charts
 pm2 start init.js --name=unlocker -- --module=unlocker
 pm2 start init.js --name=payments -- --module=payments
+pm2 start init.js --name=web -- --module=web --port=8080
 ```
 It will help you to log each module easily by using `pm2 log <module_name>`.
-
