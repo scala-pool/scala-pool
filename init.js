@@ -122,6 +122,9 @@ log('info', logSystem, 'Starting Scala Node.JS pool version %s', [global.config.
         let key = true;
         for(let i in reqModules){
         	switch(reqModules[i]){
+		   case 'web':
+			spawnWeb();
+			break;
 	            case 'pool':
 	            case 'payments':
 	            case 'unlocker':

@@ -1,0 +1,57 @@
+language: node_js
+
+os: linux
+dist: bionic
+
+node_js:
+  - 14
+
+env:
+  - CXX=g++-7
+
+jobs:
+  fast_finish: true
+  include:
+    - env: COMPILER=g++-7 BUILD=Debug STANDARD=14
+      compiler: gcc
+      addons:
+        apt:
+          update: true
+          sources:
+            - sourceline: 'ppa:mhier/libboost-latest'
+            - ubuntu-toolchain-r-test
+          packages:
+            - build-essential
+            - g++-7
+            - libboost-all-dev
+            - cmake 
+            - pkg-config 
+            - libboost-all-dev 
+            - libssl-dev 
+            - libzmq3-dev 
+            - libunbound-dev 
+            - libsodium-dev 
+            - libunwind8-dev 
+            - liblzma-dev 
+            - libreadline6-dev 
+            - libldns-dev 
+            - libexpat1-dev
+
+services:
+  - redis
+
+cache: false  
+
+before_install:
+    - "npm install -g npm@latest"
+    - npm install -g node-gyp
+
+install:
+    - npm install
+    - cp defaults/config.travis.json config.json
+
+script:
+  - npm run tests
+
+notifications:
+  email: false
