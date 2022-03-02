@@ -1,5 +1,11 @@
 <!DOCTYPE html>
-<html>
+<!--
+* CoreUI - Free Bootstrap Admin Template
+* @version v4.1.0
+* @link https://coreui.io
+* Copyright (c) 2021 creativeLabs Łukasz Holeczek
+* Licensed under MIT (https://coreui.io/license)
+-->
 <head lang="en">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
@@ -7,11 +13,11 @@
     <title>Scala Mining Pool</title>
 
     <meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<meta name="mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="mobile-web-app-capable" content="yes">
 
-	
-	<link rel="manifest" href="./manifest.json">
+  
+  <link rel="manifest" href="./manifest.json">
     <link rel="apple-touch-icon" sizes="57x57" href="./favicon/apple-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="./favicon/apple-icon-60x60.png">
     <link rel="apple-touch-icon" sizes="72x72" href="./favicon/apple-icon-72x72.png">
@@ -21,149 +27,923 @@
     <link rel="apple-touch-icon" sizes="144x144" href="./favicon/apple-icon-144x144.png">
     <link rel="apple-touch-icon" sizes="152x152" href="./favicon/apple-icon-152x152.png">
     <link rel="apple-touch-icon" sizes="180x180" href="./favicon/apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192"  href="./favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="./favicon/android-icon-192x192.png">
     <link rel="icon" type="image/png" sizes="32x32" href="./favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="96x96" href="./favicon/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="16x16" href="./favicon/favicon-16x16.png">
     <link rel="manifest" href="./manifest.json">
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="./favicon/ms-icon-144x144.png">
-	
-	<meta name="theme-color" content="#ff0000" />
+  
+  <meta name="theme-color" content="#ff0000">
 
-	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<meta property="og:title" content="Scala Pool" />
-	<meta property="og:type" content="website" />
-	<meta property="og:site_name" content="Scala Pool" />
-	<meta property="og:url" content="https://pool.scalapool.io" />
-	<meta property="og:image" content="/img/logo-large.jpeg" />
-	<meta property="og:image:type" content="image/jpeg" />
-	<meta property="og:image:alt" content="Scala Pool Logo" />
-	<meta property="og:image:width" content="332" />
-	<meta property="og:image:height" content="331" />
-	<meta property="og:description" content="Community driven mining pool for the Scala communities" />
-	<meta name="twitter:card" content="summary" />
-	<meta name="twitter:site" content="@scalahq" />
-	<meta name="twitter:creator" content="@ahmyi" />
-	<meta name="twitter:title" content="Scala Mining Pool" />
-	<meta name="twitter:description" content="Scala Mining Pool" />
-	<meta name="twitter:image" content="/img/logo.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta property="og:title" content="Scala Pool">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Scala Pool">
+  <meta property="og:url" content="https://pool.scalaproject.io">
+  <meta property="og:image" content="./img/logo-large.jpeg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:alt" content="Scala Pool Logo">
+  <meta property="og:image:width" content="332">
+  <meta property="og:image:height" content="331">
+  <meta property="og:description" content="Community driven mining pool for the Scala communities">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@scalahq">
+  <meta name="twitter:creator" content="@ahmyi">
+  <meta name="twitter:title" content="Scala Mining Pool">
+  <meta name="twitter:description" content="Scala Mining Pool">
+  <meta name="twitter:image" content="./img/logo.svg">
 
 
-	<link rel="icon" type="image/jpeg" sizes="32x32" href="./img/logo-large.jpeg">
-	<link rel="icon" type="image/jpeg" sizes="16x16" href="./img/logo-large.jpeg">
+  <link rel="icon" type="image/jpeg" sizes="32x32" href="./img/logo-large.jpeg">
+  <link rel="icon" type="image/jpeg" sizes="16x16" href="./img/logo-large.jpeg">
 
-	<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
 
-    	<link href="css/dark.css?v1.50" rel="stylesheet">
-    	<link href="css/custom.css" rel="stylesheet">
-</head>
-<body>
+    <!-- <meta name="theme-color" content="#ffffff"> -->
+    <!-- Vendors styles-->
+    <link rel="stylesheet" href="vendors/simplebar/css/simplebar.css">
+    <link rel="stylesheet" href="css/vendors/simplebar.css">
+    <!-- Main styles for this application-->
+    <link href="css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+    <link href="vendors/@coreui/chartjs/css/coreui-chartjs.css" rel="stylesheet">
+  </head>
+  <body>
+        <div class="wrapper d-flex flex-column min-vh-100 bg-darkest">
+      <header class="header header-sticky mb-4">
+  <div class="container">
 
-<div id="wrapper">
+    <a class="header-brand d-md-none" href="#">
+      <svg width="118" height="46" alt="CoreUI Logo">
+        <use xlink:href="assets/brand/coreui.svg#full"></use>
+      </svg></a>
+      <ul class="header-nav d-none d-md-flex">
+        <li class="nav-item dropdown">
+          <a class="nav-link py-0" data-coreui-toggle="dropdown" href="#index" role="button" aria-haspopup="true" aria-expanded="false">
+            <div class="avatar avatar-md"><img alt='logo.svg' src="./img/logo.svg" ></div>
+          </a>
+        </li>
+      </ul>
+      <ul class="header-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="#index">Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link" href="#blocks">Blocks</a></li>
+        <li class="nav-item"><a class="nav-link" href="#payments">Payments</a></li>
+        <li class="nav-item"><a class="nav-link" href="#ranks">Ranks</a></li>
+        <li class="nav-item"><a class="nav-link" href="#users">Users</a></li>
+      </ul>
 
-    <!-- Navigation -->
-    <div class="nav-side-menu">
-        <div class="brand">
-			<a href="/"><img src="img/logo.svg"></a>
-		</div>
-        
-        
-        <i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse" data-target="#menu-content"></i>  
-        <div class="menu-list">
-            <ul id="menu-content" class="menu-content collapsed out">
-        
-                <li><a class="hot_link" data-page="home.html" href="#">
-                    <i class="fa fa-home"></i> <span tkey="dashboard">Dashboard</span>
-                </a></li>
+    </div>
+    <div class="header-divider" style="flex-basis: calc(100% + 1rem);height: 0;margin: 0.5rem -0.5rem;border-top: 1px solid #444648"></div>
+    <div class="container">
+      <nav aria-label="breadcrumb" id='breadcrumbs'></nav>
+    </div>
+  </header>      <div class="body flex-grow-1 px-3" id='app'>
+        <transition name="fade">
+        <div class="container-lg" v-if='currentPage === "index"'>
+  <div class="row">
 
-                <li><a class="hot_link" data-page="worker_stats.html" href="#worker_stats">
-                    <i class="fas fa-dolly"></i> <span tkey="yourStats">Worker Statistics</span>
-                </a></li>
+    <div class="col-sm-12 col-md-3">
 
-                <li><a class="hot_link" data-page="getting_started.html" href="#getting_started">
-                    <i class="fa fa-rocket"></i> <span tkey="gettingStarted">Getting Started</span>
-                </a></li>
-
-                <li><a class="hot_link" data-page="pool_blocks.html" href="#pool_blocks">
-                    <i class="fa fa-cubes"></i> <span tkey="poolBlocks">Pool Blocks</span>
-                </a></li>
-
-                <li><a class="hot_link" data-page="payments.html" href="#payments">
-                    <i class="fa fa-money-bill"></i> <span tkey="payments">Payments</span>
-                </a></li>            
-
-                <li><a class="hot_link" data-page="top10miners.html" href="#top10miners">
-                    <i class="fa fa-trophy"></i> <span tkey="top25miners">Top 25 miners</span>
-                </a></li>
-
-                 <li><a class="hot_link" data-page="shares.html" href="#shares">
-                    <i class="fa fa-futbol"></i> <span tkey="shares">Shares</span>
-                </a></li>
-
-                <li><a class="hot_link" data-page="faq.html" href="#faq">
-                    <i class="fa fa-comments"></i> <span tkey="faq">FAQ</span>
-                </a></li>
-                
-                <li><a class="hot_link" data-page="changelog.html" href="#changelog">
-                    <i class="fa fa-road"></i> <span tkey="changelog">Change Log</span>
-                </a></li>
-                
-<!--                 <li><a class="hot_link" data-page="live.html" href="#networks">
-                    <i class="fa fa-sitemap"></i> <span tkey="network">Network</span>
-                </a></li> -->
-                
-<!--                 <li><a class="hot_link" href="daemon.html">
-                    <i class="fas fa-laptop-code"></i> <span>Daemon API</span>
-                </a></li>
- -->
-            </ul>
+      <div class="col-12">
+        <div class="card mb-4 text-white bg-gray-dark">
+          <div class="card-body pb-0 d-flex justify-content-between align-items-start">
+            <div>
+              <div class="fs-4 fw-semibold">{{ hashrate.pool }} <span class="fs-6 fw-normal">({{ hashrate.network }})</span></div>
+              <div>Hashrate</div>
+              <div>Pool  <span style='color: rgb(192 196 203);'>(Network)</span></div>
+              <div class="dropdown"></div>
+            </div>
+          </div>
+          <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;"><canvas class="chart" id="chartHashrates" height="70"></canvas></div>
         </div>
-	
+      </div>
+
+      <div class="col-12">
+        <div class="card mb-4 text-white bg-gray-dark">
+          <div class="card-body pb-0 d-flex justify-content-between align-items-start">
+            <div>
+              <div class="fs-4 fw-semibold"> {{ efforts.props }}% <span class="fs-6 fw-normal">({{ efforts.solo }}%)</span></div>
+              <div>Efforts</div>
+              <div>Props  <span style='color: rgb(192 196 203);'>(Solo)</span></div>
+            </div>
+            <div class="dropdown"></div>
+          </div>
+          <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;"><canvas class="chart" id="chartEfforts" height="70"></canvas></div>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="card mb-4 text-white bg-gray-dark">
+          <div class="card-body pb-0 d-flex justify-content-between align-items-start">
+            <div>
+              <div class="fs-4 fw-semibold">{{ pool.miners }} <span class="fs-6 fw-normal" style='color: #8a93a2'>({{ pool.workers }})</span></div>
+              <div>Miners <span style='color: rgb(192 196 203);'>(Workers)</span></div>
+            </div>
+            <div class="dropdown"></div>
+          </div>
+          <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;"><canvas class="chart" id="chartMinerWorkers" height="70"></canvas></div>
+        </div>
+      </div>
     </div>
 
-    <!-- Top Bar -->
-    <div id="top-bar">
-        <div id="section"><span tkey="network">Network</span>: <strong><span id="g_networkHashrate"><span tkey="na">N/A</span></span></strong></div>
-        <div id="section"><span tkey="pool">Pool</span>: <strong><span id="g_poolHashrate"><span tkey="na">N/A</span></span></strong></div>
-        <div id="section"><span tkey="you">You</span>: <strong><span id="g_userHashrate"><span tkey="na">N/A</span></span></strong></div>
-        <div id="section"><span id="statsUpdated"><span tkey="statsUpdated">Stats Updated</span> &nbsp;<i class="fa fa-bolt"></i></span></div>
-	<div id="langSelector"></div>
+
+    <div class="col-sm-12 col-md-9"><div class="card mb-4">
+  <div class="card-body">
+    <div class="d-flex justify-content-between">
+      <div>
+        <h4 class="card-title mb-0">Market</h4>
+        <div class="small text-medium-emphasis"></div>
+      </div>
+      <div class="btn-toolbar d-none d-md-block" role="toolbar" aria-label="Toolbar with buttons">
+        <div class="btn-group btn-group-toggle" data-coreui-toggle="buttons" v-for="symbol in market.symbols">
+          <input class="btn-check" type="radio" name="options" autocomplete="off" :value='symbol' :checked='selectedMarket === symbol'>
+          <label class="btn btn-outline-secondary" v-on:click='setSelectedMarket(symbol)' :class="{
+            active: selectedMarket === symbol}"> {{  symbol }} 
+          </label>
+        </div>
+
+      </div>
     </div>
-    
-    <!-- Page content -->
-    <div id="page-wrapper">
-        <div id="page"></div>
-        <p id="loading" class="text-center"><i class="fas fa-spinner fa-spin"></i></p>
+    <div class="c-chart-wrapper" style="height:375px;margin-top:40px;">
+      <canvas class="chart" id="chartMarket" height="300"></canvas>
     </div>
-    
+  </div>
+  <div class="card-footer">
+    <div class="row row-cols-1 row-cols-md-5 text-center">
+      <div class="col mb-sm-4 mb-0">
+        <div class="text-medium-emphasis">Current Price</div>
+        <div class="fw-semibold">{{ ui.market.price}} </div>
+        <div class="progress progress-thin mt-2">
+          <div class="progress-bar bg-info" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+      </div>
+      <div class="col mb-sm-2 mb-0">
+        <div class="text-medium-emphasis">1 Hour</div>
+        <div class="fw-semibold">{{ ui.market.percent_change_1h}}%</div>
+        <div class="progress progress-thin mt-2">
+          <div class="progress-bar" :class="{ 'bg-success' : ui.market.percent_change_1h > 0, 'bg-danger' : ui.market.percent_change_1h < 0 }" :style="{ width:marketPercentChange(ui.market.percent_change_1h)  + '%'}" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+      </div>
+
+      <div class="col mb-sm-2 mb-0">
+        <div class="text-medium-emphasis">24 Hour</div>
+        <div class="fw-semibold">{{ ui.market.percent_change_24h}}%</div>
+        <div class="progress progress-thin mt-2">
+          <div class="progress-bar" :class="{ 'bg-success' : ui.market.percent_change_24h > 0, 'bg-danger' : ui.market.percent_change_24h < 0 }" :style="{ width:marketPercentChange(ui.market.percent_change_24h)  + '%'}" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+      </div>
+
+      <div class="col mb-sm-2 mb-0">
+        <div class="text-medium-emphasis">7 Days</div>
+        <div class="fw-semibold">{{ ui.market.percent_change_7d}}%</div>
+        <div class="progress progress-thin mt-2">
+          <div class="progress-bar" :class="{ 'bg-success' : ui.market.percent_change_7d > 0, 'bg-danger' : ui.market.percent_change_7d < 0 }" :style="{ width:marketPercentChange(ui.market.percent_change_7d)  + '%'}" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+      </div>
+
+      <div class="col mb-sm-2 mb-0">
+        <div class="text-medium-emphasis">30 Days</div>
+        <div class="fw-semibold">{{ ui.market.percent_change_30d}}%</div>
+        <div class="progress progress-thin mt-2">
+          <div class="progress-bar" :class="{ 'bg-success' : ui.market.percent_change_30d > 0, 'bg-danger' : ui.market.percent_change_30d < 0 }" :style="{ width:marketPercentChange(ui.market.percent_change_30d)  + '%'}" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+</div></div>
+
+    <div class="col-sm-12 col-md-6 text-black" style='background-color: rgba(247, 247, 248, 1) !important;'>
+      <div class="text"><span tkey="lastHash">Last Hash</span></div>
+      <div class="content clearfix">
+       <div class="value"><a target="_blank" :href='ui.index.lastHashLink'>{{ui.index.lastHash}}</a></div>
+       <div class="value">Block Reward : {{ui.index.lastReward}}</div>
+       <div class="value">Miner Reward : {{ui.index.lastRewardMiner}}</div>
+       <div class="time">{{ui.index.lastHashFound}}</div>
+     </div>
+   </div>
+
+   <div class="col-sm-12 col-md-6 bg-dark">
+     <div id="miningProfitCalc">
+      <div id="calcHashHolder">
+        <div class="input-group">
+          <input class="form-control" id="calcHashRate" tplaceholder="enterYourHashrate" placeholder="Enter Your Hash Rate" type="number" v-model='calcEarnInput'>
+          <div class="input-group-btn">
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-coreui-toggle="dropdown" aria-expanded="false"> {{ calcEarnSymbol }}</button>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                <li><a class="dropdown-item" href="#" v-on:click='calculatorMultiplierSet(1)'>H/s</a></li>
+                <li><a class="dropdown-item" href="#" v-on:click='calculatorMultiplierSet(2)'>kH/s</a></li>
+                <li><a class="dropdown-item" href="#" v-on:click='calculatorMultiplierSet(3)'>MH/s</a></li>
+              </ul>
+            </div>
+            
+          </div>
+          <span class="input-group-addon">=</span>            
+        </div>
+        <div class="text-white">
+          <p class="mt-2"><span>{{ calcEarnPerDay }}</span><span tkey="perDay">&nbsp;per day</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<!-- Footer -->
-<footer>
-    <div class="text-muted">
-        <p>Made with <span style='color:#b11c1c'>❤</span> by Scala Team</p>
-        <span tkey="poweredBy">Powered by</span> <a target="_blank" href="https://github.com/scala-network/scala-pool"><i class="fab fa-github"></i>&nbsp;scala-pool</a>
-        <span id="poolVersion"></span>
-        <span class="hidden-xs"><span tkey="openSource">open sourced under the</span> <a href="http://www.gnu.org/licenses/gpl-2.0.html">GPL</a></span>
-        <span>Sound by </span><a target='_blank' href="https://notificationsounds.com">Notification Sounds</a>
+
+<div class="row mt-5 mb-5">
+  <div class="col-12">
+    <h1 class="text-white">Getting Started</h1>
+  </div>
+  <div class="col-md-6 col-sm-12">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Connection Details</h5>
+          <p class="card-text"> Mining Pool Address:</p>
+          <ul>
+            <li v-for="host in hosts">{{host}}</li>
+          </ul>
+          <p class="card-text"> Algorithms:</p>
+          <ul v-for="algo in algos">
+            <li>{{algo}}</li>
+          </ul>
+
+          <p class="card-text"> Ports:</p>
+          <table class="table table-hover table-striped table-dark">
+            <thead>
+              <tr>
+                <th class="col1"><span tkey="port">Port</span></th>
+                <th class="col2"><span tkey="portDiff">Starting Difficulty</span></th>
+                <th class="col3"><span tkey="description">Description</span></th>
+                <th class="col3"><span tkey="pooltype">Pool Type</span></th>
+                <th class="col3"><span tkey="pooltype">Donation</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr  v-for='port in ports'>
+                <td class="col1"><span class="miningPort">{{port.port}}</span></td>
+                <td class="col2"><span class="miningPortDiff">{{port.difficulty}}</span></td>
+                <td class="col3"><span class="miningPortDesc">{{port.desc}}</span></td>
+                <td class="col4"><span class="miningPoolType">{{port.poolType}}</span></td>
+                <td class="col4"><span class="miningPoolType">{{port.donation}}</span></td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
     </div>
-</footer>
+  </div>
+  <div class="col-md-6 col-sm-12">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Username Paramters</h5>
+        <h6 class="card-subtitle mb-2 text-muted">coinaddress.payment_id+static_difficulty%donation_contribution%</h6>
+        <p class="card-text"><span class="fw-semibold"> coinaddress:</span>&nbsp;Your coin wallet address</p>
+        <p class="card-text"><span class="fw-semibold"> payment_id:</span>&nbsp;Your coin wallet payment id</p>
+        <p class="card-text"><span class="fw-semibold"> static_difficulty:</span>&nbsp;Set static difficulty to mine</p>
+        <p class="card-text"><span class="fw-semibold"> donation_contribution:</span>&nbsp;Percent on how much you want to donate to pool</p>
+      </div>
+    </div>
 
-<audio id='blockAudioAlert' src="audio/gentle-alarm.ogg" type="audio/ogg" preload="auto" mutmuted="muted" autoplay="true"></audio>
-<button type="button" style="z-index:-1;opacity:0;position: absolute;left:-1000px;" id="btnBlockAudioAlert"></button>
-<!-- Javascript -->
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.6.3/jquery.timeago.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
-<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" integrity="sha512-CNgIRecGo7nphbeZ04Sc13ka07paqdeTu0WR1IM4kNcpmBAUSHSQX0FslNhTDadL4O5SAGapGt4FodqL8My0mA==" crossorigin="anonymous"></script>
-<script src="config.js"></script>
-<script src="lang/languages.js"></script>
-<script src="js/common.js?v1.50"></script>
-<script src="js/custom.js"></script>
-<script src='js/script.js?v1.50'></script>
+    <div class="card mt-2">
+      <div class="card-body">
+        <h5 class="card-title">Password Paramters</h5>
+        <h6 class="card-subtitle mb-2 text-muted">rig_name</h6>
+        <p class="card-text"><span class="fw-semibold"> rig_name:</span>&nbsp;Identification for worker. If not provided will be automatically set as x</p>
+      </div>
+    </div>
 
-</body>
+  </div>
+    <div class="col-12  mt-2">
+      <div class="card">
+       <div class="card-body">
+         <h5 class="card-title">Mining Applications</h5>
+         <h6 class="card-subtitle mb-2 text-muted">Generate your custom configuration to mine on pool</h6>
+
+         <div class="row">
+          <div class="col-12 mb-1">
+            <div class="input-group push-down-5">
+              <span class="input-group-addon"><i class="fa fa-link"></i></span>
+              <select class="form-control"  v-model='ui.start.host'>
+                <option value=''  selected>Select Host</option>
+                <option :value='host'  v-for="host in hosts">{{ host }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-12 mb-1">
+            <div class="input-group push-down-5">
+              <span class="input-group-addon"><i class="fa fa-link"></i></span>
+              <select class="form-control"  v-model='ui.start.port'>
+                <option value='' selected>Select Port</option>
+                <option :value='port.port' v-for="port in ports">{{port.port}} – {{port.desc}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-sm-6 col-xs-12 mb-1">
+            <div class="input-group push-down-5">
+              <span class="input-group-addon"><i class="fa fa-key"></i></span>
+              <input class="form-control" v-model="gAddress" type="text" tplaceholder="addressField" placeholder="Wallet Address" required="required">
+            </div>
+          </div>
+          <div class="col-sm-6 col-xs-12 mb-1">
+            <div class="input-group push-down-5">
+              <span class="input-group-addon"><i class="fas fa-exchange-alt"></i></span>
+              <input class="form-control" v-model="gPaymentId" type="text" tplaceholder="paymentIdField" placeholder="Payment ID for exchanges (optional)">
+            </div>
+          </div>
+          <div class="col-sm-6 col-xs-12">
+            <div class="input-group push-down-5">
+              <span class="input-group-addon"><i class="fa fa-server"></i></span>
+              <input class="form-control" v-model="ui.start.workerName" tplaceholder="workerNameField" type="text" placeholder="Worker_Name"> 
+            </div>
+          </div>
+          <div class="col-sm-6 col-xs-12">
+            <div class="input-group push-down-5">
+              <span class="input-group-addon"><i class="fa fa-wrench"></i></span>
+              <input class="form-control" v-model="gDifficulty" type="text" tplaceholder="fixedDiffField" placeholder="Fixed difficulty (optional)">
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    </div>
+
+    <div class="col-12  mt-2 mb-5">
+      <div class="card 5">
+        <div class="table table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th><i class="fa fa-book"></i> <span tkey="appName">App Name</span></th>
+                <th><i class="fa fa-car"></i> <span tkey="appArch">Architecture</span></th>
+                <th><i class="fa fa-star"></i> <span tkey="appDesc">Features</span></th>
+                <th><i class="fa fa-download"></i> <span tkey="download">Download</span></th>
+              </tr>
+            </thead>
+            <tbody>
+<tr>
+                <td class="miningAppTitle">Scala Mobile Miner</td>
+                <td>CPU</td>
+                <td>Lightweight but powerful Android Mining App</td>
+                <td><a class="btn btn-success" target="_blank" href="https://github.com/scala-network/MobileMiner/releases"><span tkey="download">Download</span></a></td>
+              </tr>
+              <!-- XMRig -->
+
+                            <tr>
+                <td colspan="4" class="text-center bg-dark text-white">
+                </td>
+                              </tr>
+
+              <!-- XMRig -->
+                            <tr>
+                <td class="miningAppTitle">XLARig</td>
+                <td>CPU</td>
+                <td>Lightweight but powerful CPU Mining App</td>
+                <td><a class="btn btn-success" target="_blank" href="https://github.com/scala-network/XLArig/releases"><span tkey="download">Download</span></a></td>
+              </tr>
+<tr>
+                <td colspan="4">
+                    <pre><code>
+xlariui.start.exe --donate-level 1 -o {{ ui.start.host }}:{{ ui.start.port }} -u {{ ui.start.login }} -p {{ ui.start.workerName }} -a panthera -k 
+</code></pre>
+
+                </td>
+              </tr>
+
+                            <tr>
+                <td colspan="4" class="text-center bg-dark text-white">
+                </td>
+                              </tr>
+              <tr>
+                <td class="miningAppTitle">xmrigCC</td>
+                <td>CPU</td>
+                <td>High performance RandomX, CryptoNight, Argon2 and AstroBWT CPU miner for support for Windows, Linux and MacOS.</td>
+                <td><a class="btn btn-success" target="_blank" href="https://github.com/Bendr0id/xmrigCC/releases"><span tkey="download">Download</span></a></td>
+              </tr>
+            
+<tr>
+                <td colspan="4">
+                    <pre><code>
+xmrigDaemon.exe --donate-level 1 -o {{ ui.start.host }}:{{ ui.start.port }} -u {{ ui.start.login }} -p {{ ui.start.workerName }} -a panthera -k 
+</code></pre>
+
+                </td>
+              </tr>
+              <tr>
+                <td colspan="4" class="text-center bg-dark text-white">
+                </td>
+                              </tr>
+
+ <tr>
+                <td class="miningAppTitle">SRBminer</td>
+                <td>CPU</td>
+                <td>SRBMiner-MULTI CPU & AMD GPU Miner</td>
+                <td><a class="btn btn-success" target="_blank" href="https://github.com/doktor83/SRBMiner-Multi/releases"><span tkey="download">Download</span></a></td>
+              </tr>
+
+         
+<tr>
+                <td colspan="4">
+                    <pre><code>
+SRBMiner-MULTI.exe --algorithm panthera --pool {{ ui.start.host }}:{{ ui.start.port }} --wallet {{ ui.start.login }} --password {{ ui.start.workerName }}
+</code></pre>
+
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+      </div>
+
+</div>
+</div>
+
+        </transition>
+        <transition name="fade">
+        <div class="container-lg" v-if='currentPage === "blocks"'>
+  <!-- Statistics -->
+  <div class="row mb-2">
+    <div class='col-lg-4 d-lg-block d-md-none d-sm-none d-xs-none'>
+      
+
+      <nav>
+        <div class="nav nav-tabs mb-3" id="nav-tab" role="tablist">
+          <button class="nav-link active" id="nav-home-tab" data-coreui-toggle="tab" data-coreui-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Summary</button>
+          <button class="nav-link" id="nav-pool-tab" data-coreui-toggle="tab" data-coreui-target="#nav-pool" type="button" role="tab" aria-controls="nav-pool" aria-selected="false">Pool</button>
+          <button class="nav-link" id="nav-profile-tab" data-coreui-toggle="tab" data-coreui-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Props</button>
+          <button class="nav-link" id="nav-contact-tab" data-coreui-toggle="tab" data-coreui-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Solo</button>
+        </div>
+      </nav>
+      <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+
+          <div class="row">
+
+            <!-- Avg Block -->
+            <div class="col-12 hidden-xs hidden-sm">
+              <div class="infoBox hoverExpandEffect">
+                <div class="icon">
+                  <span class="fa fa-chart-line"></span>
+                </div>
+                <div class="content">
+                  <div class="text"><span tkey="averageBlockDay">Avg Block Per Day</span></div>
+                  <div class="value">{{ui.block.averageBlockDay}}</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Average Income -->
+            <div class="col-12 hidden-xs hidden-sm">
+              <div class="infoBox hoverExpandEffect">
+                <div class="icon">
+                  <span class="fa fa-chart-line"></span>
+                </div>
+                <div class="content">
+                  <div class="text"><span tkey="averageIncomeDay">Avg Reward Per Day</span></div>
+                  <div class="value">{{ui.block.averageIncomeDay}}</span></div>
+                </div>
+              </div>
+            </div>
+
+
+            <!-- Maturity Depth Requirement -->
+            <div class="col-12 hidden-xs hidden-sm">
+              <div class="infoBox hoverExpandEffect">
+                <div class="icon">
+                  <span class="fa fa-unlock-alt"></span>
+                </div>
+                <div class="content">
+                  <div class="text"><span tkey="blocksMaturityCount">Maturity</span></div>
+                  <div class="value">{{ui.block.blocksMaturityCount}}</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 hidden-xs hidden-sm">
+              <div class="infoBox hoverExpandEffect">
+                <div class="icon">
+                  <span class="fa fa-trophy"></span>
+                </div>
+                <div class="content">
+                  <div class="text"><span tkey="unlockReward">Unlock Reward</span></div>
+                  <div class="value" >{{ui.block.unlockReward}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+        </div>
+        <div class="tab-pane fade" id="nav-pool" role="tabpanel" aria-labelledby="nav-pool-tab">
+         <div class="row">
+
+           <div class="hidden-xs col-12 mb-1">
+            <div class="infoBox hoverExpandEffect">
+              <div class="icon">
+                <span class="fa fa-cubes"></span>
+              </div>
+              <div class="content">
+                <div class="text"><span tkey="poolBlocksTotal">Pool Total Blocks </span></div>
+                <div class="value">{{ui.block.blocksTotal}}&nbsp;<span class="smallText">({{ui.block.lastBlockFound}})</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Average Luck -->
+          <div class="col-12 hidden-sm hidden-xs mb-1">
+            <div class="infoBox hoverExpandEffect">
+              <div class="icon">
+                <span class="fa fa-chart-line"></span>
+              </div>
+              <div class="content">
+                <div class="text"><span tkey="poolAverageLuck">Pool Average Luck</span></div>
+                <div class="value" v-html='ui.block.averageLuck'></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Current Effort -->
+          <div class="col-12 mb-1">
+            <div class="infoBox hoverExpandEffect">
+              <div class="icon">
+                <span class="fa fa-chart-line"></span>
+              </div>
+              <div class="content">
+                <div class="text"><span tkey="poolCurrentEffort">Pool Current Effort</span></div>
+                <div class="value" v-html='ui.block.currentEffort'></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Current Effort -->
+          <div class="col-12 hidden-sm hidden-xs">
+            <div class="infoBox hoverExpandEffect">
+              <div class="icon">
+                <span class="fa fa-hashtag"></span>
+              </div>
+              <div class="content">
+                <div class="text"><span tkey="poolTotalHashes">Pool Hashes</span></div>
+                <div class="value">{{ui.block.totalHashes}}</span></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+       <div class="row">
+        <div class="col-12">
+          <div class="infoBox hoverExpandEffect">
+            <div class="icon">
+              <span class="fa fa-cubes"></span>
+            </div>
+            <div class="content">
+              <div class="text"><span tkey="propsBlocksTotal">Props Total Blocks</span></div>
+              <div class="value">{{ui.block.propsBlocksTotal}} <span class="smallText">({{ui.block.propsLastBlockFound}})</span></div>
+            </div>
+          </div>
+        </div>    
+
+        <!-- Average Luck -->
+        <div class="col-12">
+          <div class="infoBox hoverExpandEffect">
+            <div class="icon">
+              <span class="fa fa-chart-line"></span>
+            </div>
+            <div class="content">
+              <div class="text"><span tkey="propsAverageLuck">Props Average Luck</span></div>
+              <div class="value" v-html='ui.block.propsAverageLuck'></div>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- Current Effort -->
+        <div class="col-12">
+          <div class="infoBox hoverExpandEffect">
+            <div class="icon">
+              <span class="fa fa-chart-line"></span>
+            </div>
+            <div class="content">
+              <div class="text"><span tkey="propsCurrentEffort">Props Current Effort</span></div>
+              <div class="value" v-html='ui.block.propsCurrentEffort'></div>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- Current Effort -->
+        <div class="col-12">
+          <div class="infoBox hoverExpandEffect">
+            <div class="icon">
+              <span class="fa fa-hashtag"></span>
+            </div>
+            <div class="content">
+              <div class="text"><span tkey="propsTotalHashes">Props Hashes</span></div>
+              <div class="value">{{ui.block.propsTotalHashes}}</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+     <!-- Total Blocks Mined -->
+     <div class="row">
+      <div class="col-12">
+        <div class="infoBox">
+          <div class="icon">
+            <span class="fa fa-cubes"></span>
+          </div>
+          <div class="content">
+            <div class="text"><span tkey="soloBlocksTotal">Solo Total Blocks</span></div>
+            <div class="value">{{ui.block.soloBlocksTotal}}&nbsp;<span class="smallText">({{ui.block.soloLastBlockFound}})</span></div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <!-- Average Luck -->
+      <div class="col-12">
+        <div class="infoBox">
+          <div class="icon">
+            <span class="fa fa-chart-line"></span>
+          </div>
+          <div class="content">
+            <div class="text"><span tkey="soloAverageLuck">Solo Average Luck</span></div>
+            <div class="value" v-html='ui.block.soloAverageLuck'></div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Current Effort -->
+      <div class="col-12">
+        <div class="infoBox">
+          <div class="icon">
+            <span class="fa fa-chart-line"></span>
+          </div>
+          <div class="content">
+            <div class="text"><span tkey="soloCurrentEffort">Solo Current Effort</span></div>
+            <div class="value" v-html='ui.block.soloCurrentEffort'></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Current Effort -->
+      <div class="col-12">
+        <div class="infoBox">
+          <div class="icon">
+            <span class="fa fa-hashtag"></span>
+          </div>
+          <div class="content">
+            <div class="text"><span tkey="soloTotalHashes">Solo Hashes</span></div>
+            <div class="value">{{ui.block.soloTotalHashes}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</div>
+
+
+
+
+
+
+</div>
+<div class='col-md-12 col-lg-8'>
+      <div class="card padding-15 padding-t-5 padding-b-5">
+        <h4 >{{ui.block.blocksChartTitle}}</h4>
+        <div class="chart" style="height:365px;">
+          <canvas id="blocksChartObj"></canvas>
+          <a class="chart-style"></a>
+        </div>
+      </div>  
+    </div>  
+
+    <div class='col-12 mt-1'>
+      <div class="card push-up-10">
+        <div id="blocksReport" class="table-responsive">
+          <table class="table table-hover table-striped">
+            <thead>
+              <tr>
+                <th class="text-center"><span tkey="height">Height</span></th>
+                <th class="text-center"><span tkey="timeFound">Time Found</span></th>
+                <th class="text-center"><span tkey="reward">Reward</span></th>
+                <th class="text-center"><span tkey="difficulty">Difficulty</span></th>
+                <th class="text-center"><span tkey="blockHash">Block Hash</span></th>
+                <th class="text-center"><span tkey="effort">Effort</span></th>
+                <th class="text-center" title="How many more blocks network must mine before this block is matured"><span tkey="status">Status</span></th>
+                <th class="text-center">Unblocker</th>
+                <th class="text-center"><span tkey="donations">Donations</span></th>
+                <th class="text-center"><span tkey="hashes">Hashes</span></th>
+                <th class="text-center">Share Type</th>
+              </tr>
+            </thead>
+            <tbody >
+              <tr v-for='table in ui.blocks'>
+                <td class="text-center" class="col1">{{table.height}}</td>
+                <td class="text-center" class="col2">{{table.moment}}</td>
+                <td class="text-center" class="col3">{{table.rewardDisplay}}</td>
+                <td class="text-center" class="col4">{{table.diffDisplay}}</td>
+                <td class="text-center" class="col5" v-html='table.hashDisplay'></td>
+                <td class="text-center" class="col6" v-html='table.effort'></td>
+                <td class="text-center" class="col7" v-html='table.maturity'></td>
+                <td class="text-center" class="col1">{{table.miner}}</td>
+                <td class="text-center" class="col1">{{table.donated}}</td>
+                <td class="text-center" class="col1">{{table.shareDisplay}}</td>
+                <td class="text-center" class="col1">{{table.poolType}}</td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <p class="text-center">
+        <button type="button" class="btn btn-dark" v-on:click><span tkey="loadMore">Load More</span></button>
+      </p>
+    </div>
+
+  </div>  
+</div>  
+
+        </transition>
+        <transition name="fade">
+        <div class="container-lg" v-if='currentPage === "payments"'>
+<!-- Statistics -->
+<div class="row">
+
+    <!-- Total Payments -->
+    <div class="col-lg-3 col-md-4 col-sm-5">
+        <div class="infoBox ">
+            <div class="icon">
+                <span class="fa fa-money-bill-alt"></span>
+            </div>
+            <div class="content">
+                <div class="text"><span tkey="paymentsTotal">Total Payments</span></div>
+                <div class="value"><span id="paymentsTotal">N/A</span> <span class="smallText">(<strong><span id="paymentsTotalPaid">N/A</span></strong> <span tkey="minersCount">miners</span>)</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-md-4 col-sm-5">
+        <div class="infoBox ">
+            <div class="icon">
+                <span class="fa fa-hand-holding-usd"></span>
+            </div>
+            <div class="content">
+                <div class="text"><span tkey="maximumPayout">Maximum Payout</span></div>
+                <div class="value">
+                    <span id="maximumTransactionPayout">N/A</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Minimum Payment Threshold -->
+    <div class="col-lg-3 col-md-4 col-sm-5">
+        <div class="infoBox ">
+            <div class="icon">
+                <span class="fa fa-hand-holding-usd"></span>
+            </div>
+            <div class="content">
+                <div class="text"><span tkey="paymentsMinimum">Minimum Payout</span><br /></div>
+                <div class="value">
+                    <span id="paymentsMinimum">N/A</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Minimum Payment Threshold -->
+    <div class="col-lg-3 col-md-4 col-sm-5">
+        <div class="infoBox ">
+            <div class="icon">
+                <span class="fa fa-hand-holding-usd"></span>
+            </div>
+            <div class="content">
+                <div class="text"><span tkey="paymentsMinimum">Minimum Payout</span><small>(Integrated Address)</small></div>
+                <div class="value">
+                    <span id="paymentsMinimumIntegratedAddress">N/A</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <!-- Payment Interval -->
+    <div class="col-lg-3 col-md-4 col-sm-5">
+        <div class="infoBox ">
+            <div class="icon">
+                <span class="fa fa-history"></span>
+            </div>
+            <div class="content">
+                <div class="text"><span tkey="paymentsInterval">Payment Interval</span></div>
+                <div class="value"><span id="paymentsInterval">N/A</span></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Denomination Unit -->
+    <div class="col-lg-3 col-md-4 col-sm-5">
+        <div class="infoBox ">
+            <div class="icon">
+                <span class="fa fa-hashtag"></span>
+            </div>
+            <div class="content">
+                <div class="text"><span tkey="paymentsDenomination">Denomination Unit</span></div>
+                <div class="value"><span id="paymentsDenomination">N/A</span></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-3 col-md-4 col-sm-5">
+        <div class="infoBox ">
+            <div class="icon">
+                <span class="fa fa-people-carry"></span>
+            </div>
+            <div class="content">
+                <div class="text"><span tkey="poolDonations">Donations Collected</span></div>
+                <div class="value"><span id="poolDonations">N/A</span></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Pool Fee -->
+    <div class="col-lg-3 col-md-4 col-sm-5">
+        <div class="infoBox ">
+            <div class="icon">
+                <span class="fa fa-people-carry"></span>
+            </div>
+            <div class="content">
+                <div class="text"><span tkey="poolContributions">Contributions</span></div>
+                <div class="value"><span id="poolContributions">N/A</span></div>
+            </div>
+        </div>
+    </div>
+    
+
+    <div class='col-12'>
+        <!-- Report -->
+        <div class="card push-up-10">
+            <div id="paymentsReport" class="table-responsive">
+                <table class="table table-hover table-striped">
+                    <thead>
+                    <tr>
+                        <th class="col1"><span tkey="timeSent">Time Sent</span></th>
+                        <th class="col2"><span tkey="transactionHash">Transaction Hash</span></th>
+                        <th class="col3"><span tkey="amount">Amount</span></th>
+                        <th class="col4"><span tkey="fee">Fee</span></th>
+                        <th class="col5"><span tkey="mixin">Mixin</span></th>
+                        <th class="col6"><span tkey="payees">Payees</span></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+            
+                    </tbody>
+                </table>
+            </div>
+        </div>
+ <p class="text-center">
+        <button type="button" class="btn btn-dark" v-on:click='loadMorePayments'><span tkey="loadMore">Load More</span></button>
+      </p>
+    </div>
+</div>
+
+
+
+</div>        </transition>  
+      </div>
+      <!-- <footer class="footer">
+        <div><a href="https://coreui.io">CoreUI </a><a href="https://coreui.io">Bootstrap Admin Template</a> © 2021 creativeLabs.</div>
+        <div class="ms-auto">Powered by&nbsp;<a href="https://coreui.io/bootstrap/ui-components/">CoreUI UI Components</a></div>
+      </footer> -->
+    </div>
+    <!-- CoreUI and necessary plugins-->
+    <script src="config.js"></script>
+    <script src="vendors/@coreui/coreui/js/coreui.bundle.min.js"></script>
+    <script src="vendors/simplebar/js/simplebar.min.js"></script>
+    <!-- Plugins and scripts required by this view-->
+    <script src="vendors/chart.js/js/chart.min.js"></script>
+    <script src="vendors/@coreui/chartjs/js/coreui-chartjs.js"></script>
+    <script src="vendors/@coreui/utils/js/coreui-utils.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://unpkg.com/vue@3.2.31/dist/vue.global.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/script.php"></script>
+    
+    <script>
+    </script>
+
+  </body>
 </html>

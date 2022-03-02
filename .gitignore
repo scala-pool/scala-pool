@@ -10,3 +10,5 @@ composer.lock
 /config
 
 testnet/
+
+.DS_Store

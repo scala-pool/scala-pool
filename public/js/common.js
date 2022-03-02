@@ -1,17 +1,4 @@
 /**
- * Common javascript code for cryptonote-nodejs-pool
- * Author: Daniel Vandal
- * GitHub: https://github.com/dvandal/cryptonote-nodejs-pool
- **/
-
-/**
- * Layout
- **/
- 
-// Collapse menu on load for mobile devices
-$('#menu-content').collapse('hide');
-
-/**
  * Cookies handler
  **/
 
@@ -48,101 +35,7 @@ var docCookies = {
     }
 };
 
-/**
- * Pages routing
- **/
 
-// Current page
-var currentPage;
-
-// Handle hash change
-if(typeof disableSidebarRouting == 'undefined' || disableSidebarRouting === false){
-	window.onhashchange = function(){
-	    routePage();
-	};
-}
-
-// Route to page
-var xhrPageLoading;
-function routePage(loadedCallback) {
-    if (currentPage) currentPage.destroy();
-    $('#page').html('');
-    $('#loading').show();
-
-    if (xhrPageLoading) {
-        xhrPageLoading.abort();
-    }
-
-    $('.hot_link').parent().removeClass('active');
-    var page;
-    if(window.location.hash !== '#settings'){
-        var $link = $('a.hot_link[href="' + (window.location.hash || '#') + '"]');    
-        $link.parent().addClass('active');
-        page = $link.data('page');
-    } else {
-        page = "settings.html";
-    }
-    
-    
-    
-    loadTranslations();
-
-    xhrPageLoading = $.ajax({
-        url: 'pages/' + page,
-        cache: false,
-        success: function (data) {
-            $('#menu-content').collapse('hide');
-            $('#loading').hide();
-            $('#page').show().html(data);
-	    loadTranslations();
-            if (currentPage) currentPage.update();
-            if (loadedCallback) loadedCallback();
-        }
-    });
-}
-
-/**
- * Strings
- **/
- 
-// Add .update() custom jQuery function to update text content
-$.fn.update = function(txt){
-    var el = this[0];
-    if (el.textContent !== txt)
-        el.textContent = txt;
-    return this;
-};
-
-// Update Text classes
-function updateTextClasses(className, text){
-    var els = document.getElementsByClassName(className);
-    if (els) {
-        for (var i = 0; i < els.length; i++){
-            var el = els[i];
-            if (el && el.textContent !== text)
-                el.textContent = text;
-        }
-    }
-}
-
-// Update Text content
-function updateHtml(elementId, text){
-    var el = document.getElementById(elementId);
-    if (el && el.innerHTML !== text){
-        el.innerHTML = text;
-    }
-    return el;
-}
-
-
-// Update Text content
-function updateText(elementId, text){
-    var el = document.getElementById(elementId);
-    if (el && el.textContent !== text){
-        el.textContent = text;
-    }
-    return el;
-}
 
 // Convert float to string
 function floatToString(float) {
@@ -151,33 +44,38 @@ function floatToString(float) {
 
 // Format number
 function formatNumber(number, delimiter){
-    if(number != '') {
-        number = number.split(delimiter).join('');
-
-        var formatted = '';
-        var sign = '';
-
-        if(number < 0){
-            number = -number;
-            sign = '-';
-        }
-
-        while(number >= 1000){
-            var mod = number % 1000;
-
-            if(formatted != '') formatted = delimiter + formatted;
-            if(mod == 0) formatted = '000' + formatted;
-            else if(mod < 10) formatted = '00' + mod + formatted;
-            else if(mod < 100) formatted = '0' + mod + formatted;
-            else formatted = mod + formatted;
-
-            number = parseInt(number / 1000);
-        }
-
-        if(formatted != '') formatted = sign + number + delimiter + formatted;
-        else formatted = sign + number;
-        return formatted;
+    if(!delimiter) {
+        delimiter = ",";
     }
+    return ("" + number).replace(/\B(?=(\d{3})+(?!\d))/g, delimiter);
+
+    // if(number != '') {
+    //     number = number.split(delimiter).join('');
+
+    //     var formatted = '';
+    //     var sign = '';
+
+    //     if(number < 0){
+    //         number = -number;
+    //         sign = '-';
+    //     }
+
+    //     while(number >= 1000){
+    //         var mod = number % 1000;
+
+    //         if(formatted != '') formatted = delimiter + formatted;
+    //         if(mod == 0) formatted = '000' + formatted;
+    //         else if(mod < 10) formatted = '00' + mod + formatted;
+    //         else if(mod < 100) formatted = '0' + mod + formatted;
+    //         else formatted = mod + formatted;
+
+    //         number = parseInt(number / 1000);
+    //     }
+
+    //     if(formatted != '') formatted = sign + number + delimiter + formatted;
+    //     else formatted = sign + number;
+    //     return formatted;
+    // }
     return '';
 }
 
@@ -208,7 +106,7 @@ function getReadableTime(seconds){
 
     function formatAmounts(amount, unit){
         var rounded = Math.round(amount);
-	var unit = unit + (rounded > 1 ? 's' : '');
+    var unit = unit + (rounded > 1 ? 's' : '');
         if (getTranslation(unit)) unit = getTranslation(unit);
         return '' + rounded + ' ' + unit;
     }
@@ -241,22 +139,33 @@ function getReadableHashRateString(hashrate){
 // Get coin decimal places
 function getCoinDecimalPlaces() {
     if (typeof coinDecimalPlaces != "undefined") return coinDecimalPlaces;
-    else if (lastStats.config.coinDecimalPlaces) return lastStats.config.coinDecimalPlaces;
+    else if (window.config.coinDecimalPlaces) return window.config.coinDecimalPlaces;
     else lastStats.config.coinUnits.toString().length - 1;
 }
 
 // Get readable coins
 function getReadableCoins(coins, digits, withoutSymbol){
     var coinDecimalPlaces = getCoinDecimalPlaces();
-    var amount = (parseFloat(coins || 0) / lastStats.config.coinUnits).toFixed(digits || coinDecimalPlaces).split('.');
-    return parseInt(amount[0]).toLocaleString() +'.'+ amount[1] + (withoutSymbol ? '' : (' ' + lastStats.config.symbol));
+    var amount = (parseFloat(coins || 0) / window.config.coinUnits).toFixed(digits || coinDecimalPlaces).split('.');
+    return parseInt(amount[0]).toLocaleString() +'.'+ amount[1] + (withoutSymbol ? '' : (' ' + window.config.symbol));
 }
 
 // Format payment link
-function formatPaymentLink(hash){
-    return '<a target="_blank" href="' + getTransactionUrl(hash) + '">' + hash + '</a>';
+function formatPaymentLink(hash, cut){
+    let cutHash = hash;
+    if(cut) {
+        cutHash = hash.slice(0, 4) + "..." + hash.slice(hash.length-4, hash.length)
+    }
+    return '<a target="_blank" href="' + getTransactionUrl(hash) + '">' + cutHash + '</a>';
 }
-
+// Format payment link
+function formatHash(hash, cut){
+    let cutHash = hash;
+    if(cut) {
+        cutHash = hash.slice(0, 4) + "..." + hash.slice(hash.length-4, hash.length)
+    }
+    return '<a target="_blank" href="' + getTransactionUrl(hash) + '">' + cutHash + '</a>';
+}
 // Format difficulty
 function formatDifficulty(x) {
     if(!x) return x
@@ -267,18 +176,20 @@ function formatDifficulty(x) {
 // Format luck / current effort
 function formatLuck(difficulty, shares) {
     var percent = Math.round(shares / difficulty * 100);
+    
     if(!percent){
         return '<span class="luckGood">?</span>';
     }
-    else if(percent <= 100){
+    
+    if(percent <= 100){
         return '<span class="luckGood">' + percent + '%</span>';
     }
-    else if(percent >= 101 && percent <= 150){
+    
+    if(percent >= 101 && percent <= 150){
         return '<span class="luckMid">' + percent + '%</span>';
     }
-    else{
-        return '<span class="luckBad">' + percent + '%</span>';
-    }    
+    
+    return '<span class="luckBad">' + percent + '%</span>';
 }
 
 function getDonationSmiley(level) {
@@ -294,23 +205,14 @@ function getDonationSmiley(level) {
  * URLs
  **/
 
-// Return pool host
-function getPoolHost() {
-    if (typeof window.config.poolHosts !== "undefined") {
-	    return "<ul><li>" + window.config.poolHosts.join("</li><li>") + "</li></ul>"
-    }
-    if (lastStats.config.poolHost) return lastStats.config.poolHost;
-    else return window.location.hostname;
-}
-
 // Return transaction URL
 function getTransactionUrl(id) {
-    return window.config.transactionExplorer.replace(new RegExp('{symbol}', 'g'), lastStats.config.symbol.toLowerCase()).replace(new RegExp('{id}', 'g'), id);
+    return window.config.transactionExplorer.replace(new RegExp('{symbol}', 'g'), window.config.symbol.toLowerCase()).replace(new RegExp('{id}', 'g'), id);
 }
 
 // Return blockchain explorer URL
 function getBlockchainUrl(id) {
-    return window.config.blockchainExplorer.replace(new RegExp('{symbol}', 'g'), lastStats.config.symbol.toLowerCase()).replace(new RegExp('{id}', 'g'), id);    
+    return window.config.blockchainExplorer.replace(new RegExp('{symbol}', 'g'), window.config.symbol.toLowerCase()).replace(new RegExp('{id}', 'g'), id);    
 }
  
 /**
@@ -375,7 +277,7 @@ var translate = function(data) {
 
     $("[tplaceholder]").each(function(index) {
         var strTr = data[$(this).attr('tplaceholder')];
-	$(this).attr('placeholder', strTr)
+    $(this).attr('placeholder', strTr)
     });
 
     $("[tvalue]").each(function(index) {
@@ -419,12 +321,12 @@ function renderLangSelector() {
         for (var lang in langs) {
             var selected = lang == langCode ? ' selected="selected"' : '';
             html += '<option value="' + lang + '"' + selected + '>' + langs[lang] + '</option>';
-	    numLangs ++;
+        numLangs ++;
         }
-	html += '</select>';
+    html += '</select>';
     }
     if (html && numLangs > 1) {
-        $('#langSelector').html(html);	
+        $('#langSelector').html(html);  
         $('#newLang').each(function(){
             $(this).change(function() {
                 var newLang = $(this).val();
@@ -433,7 +335,7 @@ function renderLangSelector() {
                 window.location.href = url;
             });
         });
-    }	
+    }   
 
     // Mobile
     var html = '';
@@ -443,12 +345,12 @@ function renderLangSelector() {
         for (var lang in langs) {
             var selected = lang == langCode ? ' selected="selected"' : '';
             html += '<option value="' + lang + '"' + selected + '>' + langs[lang] + '</option>';
-	    numLangs ++;
+        numLangs ++;
         }
-	html += '</select>';
+    html += '</select>';
     }
     if (html && numLangs > 1) {
-        $('#mLangSelector').html(html);	
+        $('#mLangSelector').html(html); 
         $('#mNewLang').each(function(){
             $(this).change(function() {
                 var newLang = $(this).val();
@@ -457,5 +359,77 @@ function renderLangSelector() {
                 window.location.href = url;
             });
         });
-    }	
+    }   
+}
+
+// Parse block data
+function parseBlock(networkHeight, depth, serializedBlock){
+    if(!serializedBlock) {
+        return;
+    }
+    var parts = serializedBlock.split(':');
+    var properties = [
+        'height',
+        'hash',
+        'timestamp',
+        'difficulty',
+        'shares',
+        'donations',
+        'reward',
+        'miner',
+        'poolType',
+        'orphaned',
+        'unlocked'
+   ];
+
+    var block = {};
+    for(var i =0;i<properties.length;i++) {
+       var property = properties[i];
+       switch(property) {
+            case 'unlocked':
+            block[property] = (parts[i] === true || parts[i] === 'true');
+            break;
+            case 'orphaned':
+            case 'height':
+            case 'timestamp':
+            case 'difficulty':
+            case 'shares':
+            case 'donations':
+            case 'reward':
+            case 'orphaned':
+            block[property] = parseInt(parts[i])
+            break;
+            default:
+            block[property] = parts[i]
+            break;
+        }
+    }
+    var toGo = depth - (networkHeight - block.height) + 1;
+    if(toGo > 1){
+        block.maturity = toGo + ' to go';
+    } else if(toGo == 1){
+        block.maturity = "<i class='fa fa-spinner fa-spin text-info'></i>";
+    } else {
+        block.maturity = "<i class='fa fa-unlock-alt text-success'></i>";
+    }
+
+    switch (block.orphaned){
+        case '0':
+            block.status = 'unlocked';
+            block.maturity = "<i class='fa fa-unlock-alt'></i>";
+            break;
+       case '1':
+            block.status = 'orphaned';
+            block.maturity = "<i class='fa fa-times'></i>";
+            break;
+        default:
+            block.status = 'pending';
+            break;
+    }
+    if(typeof(block.miner) === 'undefined'){
+       block.miner= "xxxxxxx....xxxxxx";
+    }
+    block.effort = formatLuck(block.difficulty, block.shares);
+    block.donated = getReadableCoins(block.reward * (block.donations / block.shares));
+    return block;
 }
