@@ -216,11 +216,11 @@
 </div></div>
 
     <div class="col-sm-12 col-md-6 text-black" style='background-color: rgba(247, 247, 248, 1) !important;'>
-      <div class="text"><span tkey="lastHash">Last Hash</span></div>
       <div class="content clearfix">
        <div class="value"><a target="_blank" :href='ui.index.lastHashLink'>{{ui.index.lastHash}}</a></div>
        <div class="value">Block Reward : {{ui.index.lastReward}}</div>
        <div class="value">Miner Reward : {{ui.index.lastRewardMiner}}</div>
+       <div class="value">Block Difficulty : {{ui.index.difficulty}}</div>
        <div class="time">{{ui.index.lastHashFound}}</div>
      </div>
    </div>
@@ -791,7 +791,7 @@ SRBMiner-MULTI.exe --algorithm panthera --pool {{ ui.start.host }}:{{ ui.start.p
             </div>
             <div class="content">
                 <div class="text"><span tkey="paymentsTotal">Total Payments</span></div>
-                <div class="value"><span id="paymentsTotal">N/A</span> <span class="smallText">(<strong><span id="paymentsTotalPaid">N/A</span></strong> <span tkey="minersCount">miners</span>)</span></div>
+                <div class="value">{{ui.payments.payment_total}} <span class="smallText">(<strong>{{ui.payments.payment_miners}}</strong> <span tkey="minersCount">miners</span>)</span></div>
             </div>
         </div>
     </div>
@@ -803,9 +803,7 @@ SRBMiner-MULTI.exe --algorithm panthera --pool {{ ui.start.host }}:{{ ui.start.p
             </div>
             <div class="content">
                 <div class="text"><span tkey="maximumPayout">Maximum Payout</span></div>
-                <div class="value">
-                    <span id="maximumTransactionPayout">N/A</span>
-                </div>
+                <div class="value">{{ui.payments.max_payout}}</div>
             </div>
         </div>
     </div>
@@ -817,24 +815,8 @@ SRBMiner-MULTI.exe --algorithm panthera --pool {{ ui.start.host }}:{{ ui.start.p
             </div>
             <div class="content">
                 <div class="text"><span tkey="paymentsMinimum">Minimum Payout</span><br /></div>
-                <div class="value">
-                    <span id="paymentsMinimum">N/A</span>
-                </div>
-            </div>
-        </div>
-    </div>
+                <div class="value">{{ui.payments.min_payout}}</div>
 
-    <!-- Minimum Payment Threshold -->
-    <div class="col-lg-3 col-md-4 col-sm-5">
-        <div class="infoBox ">
-            <div class="icon">
-                <span class="fa fa-hand-holding-usd"></span>
-            </div>
-            <div class="content">
-                <div class="text"><span tkey="paymentsMinimum">Minimum Payout</span><small>(Integrated Address)</small></div>
-                <div class="value">
-                    <span id="paymentsMinimumIntegratedAddress">N/A</span>
-                </div>
             </div>
         </div>
     </div>
@@ -848,7 +830,7 @@ SRBMiner-MULTI.exe --algorithm panthera --pool {{ ui.start.host }}:{{ ui.start.p
             </div>
             <div class="content">
                 <div class="text"><span tkey="paymentsInterval">Payment Interval</span></div>
-                <div class="value"><span id="paymentsInterval">N/A</span></div>
+                <div class="value">{{ui.payments.interval}}</div>
             </div>
         </div>
     </div>
@@ -861,7 +843,7 @@ SRBMiner-MULTI.exe --algorithm panthera --pool {{ ui.start.host }}:{{ ui.start.p
             </div>
             <div class="content">
                 <div class="text"><span tkey="paymentsDenomination">Denomination Unit</span></div>
-                <div class="value"><span id="paymentsDenomination">N/A</span></div>
+                <div class="value">{{ui.payments.denomation}}</div>
             </div>
         </div>
     </div>
@@ -873,50 +855,61 @@ SRBMiner-MULTI.exe --algorithm panthera --pool {{ ui.start.host }}:{{ ui.start.p
             </div>
             <div class="content">
                 <div class="text"><span tkey="poolDonations">Donations Collected</span></div>
-                <div class="value"><span id="poolDonations">N/A</span></div>
+                <div class="value">{{ui.payments.donations}}</div>
             </div>
         </div>
     </div>
     
-    <!-- Pool Fee -->
     <div class="col-lg-3 col-md-4 col-sm-5">
         <div class="infoBox ">
             <div class="icon">
                 <span class="fa fa-people-carry"></span>
             </div>
             <div class="content">
-                <div class="text"><span tkey="poolContributions">Contributions</span></div>
-                <div class="value"><span id="poolContributions">N/A</span></div>
+                <div class="text"><span tkey="poolContributions">Pool Fees</span></div>
+                <div class="value">{{ui.payments.fee}}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-md-4 col-sm-5">
+        <div class="infoBox ">
+            <div class="icon">
+                <span class="fa fa-people-carry"></span>
+            </div>
+            <div class="content">
+                <div class="text"><span tkey="dynamicTransfer">Network Fee</span></div>
+                <div class="value">{{ui.payments.networkFee}}</div>
             </div>
         </div>
     </div>
     
 
-    <div class='col-12'>
-        <!-- Report -->
-        <div class="card push-up-10">
-            <div id="paymentsReport" class="table-responsive">
-                <table class="table table-hover table-striped">
-                    <thead>
-                    <tr>
-                        <th class="col1"><span tkey="timeSent">Time Sent</span></th>
-                        <th class="col2"><span tkey="transactionHash">Transaction Hash</span></th>
-                        <th class="col3"><span tkey="amount">Amount</span></th>
-                        <th class="col4"><span tkey="fee">Fee</span></th>
-                        <th class="col5"><span tkey="mixin">Mixin</span></th>
-                        <th class="col6"><span tkey="payees">Payees</span></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-            
-                    </tbody>
-                </table>
-            </div>
+  <div class='col-12'>
+    <!-- Report -->
+    <div class="card push-up-10">
+        <div id="paymentsReport" class="table-responsive">
+            <table class="table table-hover table-striped">
+                <thead>
+                <tr>
+                    <th class="col1"><span tkey="timeSent">Time Sent</span></th>
+                    <th class="col2"><span tkey="transactionHash">Transaction Hash</span></th>
+                    <th class="col3"><span tkey="amount">Amount</span></th>
+                    <th class="col4"><span tkey="fee">Fee</span></th>
+                    <th class="col5"><span tkey="mixin">Mixin</span></th>
+                    <th class="col6"><span tkey="payees">Payees</span></th>
+                </tr>
+                </thead>
+                <tbody>
+        
+                </tbody>
+            </table>
         </div>
+    </div>
  <p class="text-center">
         <button type="button" class="btn btn-dark" v-on:click='loadMorePayments'><span tkey="loadMore">Load More</span></button>
       </p>
-    </div>
+  </div>
 </div>
 
 
