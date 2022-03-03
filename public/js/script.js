@@ -1,4 +1,6 @@
-const setBreadCrumbs = (crumb) => {
+
+
+ const setBreadCrumbs = (crumb) => {
   var output = '<ol class="breadcrumb my-0 ms-2">';
   for(var i=0;i<crumb.length;i++) {
     const c = crumb[i];
@@ -68,7 +70,7 @@ Vue.createApp({
           lastHash : "0000000000000000000000000000000000000000000000000000000000000000",
         },
         blocks:[],
-        payments : {
+        payment : {
           payment_total : 0,
           payment_miners : 0,
           max_payout : 0,
@@ -78,7 +80,8 @@ Vue.createApp({
           donations : 0,
           fee : 0,
           networkFee: 0
-        }
+        },
+        payments:[]
       },
       market:{
         symbols:[],
@@ -247,86 +250,111 @@ const c1 = Chart.getChart("chartHashrates");
 
   if(data.network) this.difficulty = data.network.difficulty;
       
-    this.ui.block.unlockReward = data.config.unlockBlockReward +"%";
-    this.ui.block.blocksMaturityCount = data.config.depth.toString();
+this.ui.block.unlockReward = data.config.unlockBlockReward +"%";
+this.ui.block.blocksMaturityCount = data.config.depth.toString();
 
-    this.ui.block.averageLuck = formatLuck(data.pool.stats.totalDiff, data.pool.stats.totalShares);
-    this.ui.block.soloAverageLuck = formatLuck(data.pool.stats.totalDiff_solo, data.pool.stats.totalShares_solo);
-    this.ui.block.propsAverageLuck = formatLuck(data.pool.stats.totalDiff_props, data.pool.stats.totalShares_props);
+this.ui.block.averageLuck = formatLuck(data.pool.stats.totalDiff, data.pool.stats.totalShares);
+this.ui.block.soloAverageLuck = formatLuck(data.pool.stats.totalDiff_solo, data.pool.stats.totalShares_solo);
+this.ui.block.propsAverageLuck = formatLuck(data.pool.stats.totalDiff_props, data.pool.stats.totalShares_props);
 
-    this.ui.block.blocksTotal = formatDifficulty(data.pool.stats.blocksFound);
-    this.ui.block.soloBlocksTotal =  formatDifficulty(data.pool.stats.blocksFound_solo || 0);
-    this.ui.block.propsBlocksTotal = formatDifficulty(data.pool.stats.blocksFound_props || 0);
+this.ui.block.blocksTotal = formatDifficulty(data.pool.stats.blocksFound);
+this.ui.block.soloBlocksTotal =  formatDifficulty(data.pool.stats.blocksFound_solo || 0);
+this.ui.block.propsBlocksTotal = formatDifficulty(data.pool.stats.blocksFound_props || 0);
 
-    this.ui.block.currentEffort = formatLuck(data.network.difficulty, data.pool.stats.roundShares);
-    this.ui.block.soloCurrentEffort = formatLuck(data.network.difficulty, data.pool.stats.roundSharessolo);
-    this.ui.block.propsCurrentEffort = formatLuck(data.network.difficulty, data.pool.stats.roundSharesprops);
+this.ui.block.currentEffort = formatLuck(data.network.difficulty, data.pool.stats.roundShares);
+this.ui.block.soloCurrentEffort = formatLuck(data.network.difficulty, data.pool.stats.roundSharessolo);
+this.ui.block.propsCurrentEffort = formatLuck(data.network.difficulty, data.pool.stats.roundSharesprops);
 
-    this.ui.block.soloLastBlockFound =  moment(parseInt(data.pool.stats.lastBlockFound_solo || 0)).fromNow();
-    this.ui.block.propsLastBlockFound = moment(parseInt(data.pool.stats.lastBlockFound_props)).fromNow();
-    this.ui.block.lastBlockFound = moment(parseInt(data.pool.stats.lastBlockFound)).fromNow();
+this.ui.block.soloLastBlockFound =  moment(parseInt(data.pool.stats.lastBlockFound_solo || 0)).fromNow();
+this.ui.block.propsLastBlockFound = moment(parseInt(data.pool.stats.lastBlockFound_props)).fromNow();
+this.ui.block.lastBlockFound = moment(parseInt(data.pool.stats.lastBlockFound)).fromNow();
 
-    this.ui.block.totalHashes = formatDifficulty(data.pool.stats.totalShares || 0);
-    this.ui.block.soloTotalHashes = formatDifficulty(data.pool.stats.totalShares_solo || 0);
-    this.ui.block.propsTotalHashes = formatDifficulty(data.pool.stats.totalShares_props || 0);
+this.ui.block.totalHashes = formatDifficulty(data.pool.stats.totalShares || 0);
+this.ui.block.soloTotalHashes = formatDifficulty(data.pool.stats.totalShares_solo || 0);
+this.ui.block.propsTotalHashes = formatDifficulty(data.pool.stats.totalShares_props || 0);
 
 
-    var title = getTranslation('poolBlocks') ? getTranslation('poolBlocks') : 'Blocks found';
-    var chartDays = data.config.blocksChartDays || null;
-    if (chartDays) {
-        if (chartDays === 1) title = getTranslation('blocksFoundLast24') ? getTranslation('blocksFoundLast24') : 'Blocks found in the last 24 hours';
-        else title = getTranslation('blocksFoundLastDays') ? getTranslation('blocksFoundLastDays') : 'Blocks found in the last {DAYS} days';
-        title = title.replace('{DAYS}', chartDays);
+var title = getTranslation('poolBlocks') ? getTranslation('poolBlocks') : 'Blocks found';
+var chartDays = data.config.blocksChartDays || null;
+if (chartDays) {
+    if (chartDays === 1) title = getTranslation('blocksFoundLast24') ? getTranslation('blocksFoundLast24') : 'Blocks found in the last 24 hours';
+    else title = getTranslation('blocksFoundLastDays') ? getTranslation('blocksFoundLastDays') : 'Blocks found in the last {DAYS} days';
+    title = title.replace('{DAYS}', chartDays);
+}
+this.ui.block.blocksChartTitle = title;
+
+if(!this.holdUpdateBlocks) {
+  const blocksResults = data.pool.blocks;
+
+  var blockElementSets = {};
+  var incomeValue = 0;
+  var blockCount = 0;
+  var incomeHashes = 0;
+  const days = [];
+  this.ui.blocks = [];
+
+  for (var i = 0; i < blocksResults.length; i++){
+        
+      const block = parseBlock(data.network.height, data.config.depth, blocksResults[i]);
+    if(block.hash === "") continue;
+    var dIndex = formatDate(block.timestamp).split(" ")[0];
+    if(days.indexOf(dIndex) < 0) {
+      days.push(dIndex);
     }
-    this.ui.block.blocksChartTitle = title;
 
-
-    const blocksResults = data.pool.blocks;
-
-      if(!this.holdUpdateBlocks) {
-        var blockElementSets = {};
-        var incomeValue = 0;
-        var blockCount = 0;
-        var incomeHashes = 0;
-        const days = [];
-        this.ui.blocks = [];
-
-        for (var i = 0; i < blocksResults.length; i++){
-              
-            const block = parseBlock(data.network.height, data.config.depth, blocksResults[i]);
-          if(block.hash === "") continue;
-          var dIndex = formatDate(block.timestamp).split(" ")[0];
-          if(days.indexOf(dIndex) < 0) {
-            days.push(dIndex);
-          }
-
-            if(block.orphaned == 0){
-              blockCount++;
-            incomeValue+=parseFloat(block.reward);
-            incomeHashes+=block.shares;
-            }
-            block.moment = moment(block.timestamp*1000).fromNow();
-            block.height = formatNumber(block.height);
-            block.diffDisplay = formatNumber(block.difficulty);
-            block.shareDisplay = formatNumber(block.shares);
-            block.hashDisplay = formatHash(block.hash,true);
-            block.rewardDisplay = getReadableCoins(block.reward,2);
-          this.ui.blocks.push(block);     
-        }
-        this.ui.block.averageIncomeDay = getReadableCoins(incomeValue/blockCount, 2, false);
-        this.calcEarnRate = (incomeValue * 86400/ incomeHashes);//How much do we get per day / how much hash average perday
-        this.ui.block.averageBlockDay = formatDifficulty(blockCount/days.length, 2, false);
+      if(block.orphaned == 0){
+        blockCount++;
+      incomeValue+=parseFloat(block.reward);
+      incomeHashes+=block.shares;
       }
+      block.moment = moment(block.timestamp*1000).fromNow();
+      block.height = formatNumber(block.height);
+      block.diffDisplay = formatNumber(block.difficulty);
+      block.shareDisplay = formatNumber(block.shares);
+      block.hashDisplay = formatHash(block.hash,true);
+      block.rewardDisplay = getReadableCoins(block.reward,2);
+    this.ui.blocks.push(block);     
+  }
+  this.ui.block.averageIncomeDay = getReadableCoins(incomeValue/blockCount, 2, false);
+  this.calcEarnRate = (incomeValue * 86400/ incomeHashes);//How much do we get per day / how much hash average perday
+  this.ui.block.averageBlockDay = formatDifficulty(blockCount/days.length, 2, false);
+}
 
-      this.ui.payments.payment_total = (data.pool.totalPayments || 0).toString();
-      this.ui.payments.payment_miners = data.pool.totalMinersPaid.toString();
-      this.ui.payments.max_payout = getReadableCoins(data.config.maxPaymentThreshold);
-      this.ui.payments.min_payout = getReadableCoins(data.config.minPaymentThreshold);
-      this.ui.payments.interval = getReadableTime(data.config.paymentsInterval);
-      this.ui.payments.denomation = getReadableCoins(data.config.denominationUnit, data.config.coinDecimalPlaces);
-      this.ui.payments.donations = getReadableCoins(data.pool.totalDonations);
-      this.ui.payments.fee = getReadableCoins(data.config.devFee);
-      this.ui.payments.networkFee = data.config.dynamicTransferFee ? "Base on blockchain" : getReadableCoins(data.config.networkFee);
+
+      
+    this.ui.payment.payment_total = (data.pool.totalPayments || 0).toString();
+    this.ui.payment.payment_miners = data.pool.totalMinersPaid.toString();
+    this.ui.payment.max_payout = getReadableCoins(data.config.maxPaymentThreshold);
+    this.ui.payment.min_payout = getReadableCoins(data.config.minPaymentThreshold);
+    this.ui.payment.interval = getReadableTime(data.config.paymentsInterval);
+    this.ui.payment.denomation = getReadableCoins(data.config.denominationUnit, data.config.coinDecimalPlaces);
+    this.ui.payment.donations = getReadableCoins(data.pool.totalDonations);
+    this.ui.payment.fee = getReadableCoins(data.config.devFee);
+    this.ui.payment.networkFee = data.config.dynamicTransferFee ? "Base on blockchain" : getReadableCoins(data.config.networkFee);
+
+if(!this.holdUpdatePayments) {
+    
+    const paymentsResults = data.pool.payments;
+
+    this.ui.payments = [];
+
+    for (var i = 0; i < paymentsResults.length; i += 2){
+        const parts = paymentsResults[i].split(':');
+        var payment = {
+            time: moment(parseInt(paymentsResults[i + 1]) * 1000).fromNow(),
+            hash:  parts[0].split(',').map(h => {
+                return formatPaymentLink(h);        
+            }).join("</br>"),
+            amount: getReadableCoins(parts[1]),
+            fee: getReadableCoins(parts[2]),
+            mixin: parts[3],
+            recipients: parts[4]
+        };
+        this.ui.payments.push(payment)
+    }
+}
+
+
     },
     setAddress : function(addr) {
       this.address = addr;

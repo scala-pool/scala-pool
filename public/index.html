@@ -791,7 +791,7 @@ SRBMiner-MULTI.exe --algorithm panthera --pool {{ ui.start.host }}:{{ ui.start.p
             </div>
             <div class="content">
                 <div class="text"><span tkey="paymentsTotal">Total Payments</span></div>
-                <div class="value">{{ui.payments.payment_total}} <span class="smallText">(<strong>{{ui.payments.payment_miners}}</strong> <span tkey="minersCount">miners</span>)</span></div>
+                <div class="value">{{ui.payment.payment_total}} <span class="smallText">(<strong>{{ui.payment.payment_miners}}</strong> <span tkey="minersCount">miners</span>)</span></div>
             </div>
         </div>
     </div>
@@ -803,7 +803,7 @@ SRBMiner-MULTI.exe --algorithm panthera --pool {{ ui.start.host }}:{{ ui.start.p
             </div>
             <div class="content">
                 <div class="text"><span tkey="maximumPayout">Maximum Payout</span></div>
-                <div class="value">{{ui.payments.max_payout}}</div>
+                <div class="value">{{ui.payment.max_payout}}</div>
             </div>
         </div>
     </div>
@@ -815,7 +815,7 @@ SRBMiner-MULTI.exe --algorithm panthera --pool {{ ui.start.host }}:{{ ui.start.p
             </div>
             <div class="content">
                 <div class="text"><span tkey="paymentsMinimum">Minimum Payout</span><br /></div>
-                <div class="value">{{ui.payments.min_payout}}</div>
+                <div class="value">{{ui.payment.min_payout}}</div>
 
             </div>
         </div>
@@ -830,7 +830,7 @@ SRBMiner-MULTI.exe --algorithm panthera --pool {{ ui.start.host }}:{{ ui.start.p
             </div>
             <div class="content">
                 <div class="text"><span tkey="paymentsInterval">Payment Interval</span></div>
-                <div class="value">{{ui.payments.interval}}</div>
+                <div class="value">{{ui.payment.interval}}</div>
             </div>
         </div>
     </div>
@@ -843,7 +843,7 @@ SRBMiner-MULTI.exe --algorithm panthera --pool {{ ui.start.host }}:{{ ui.start.p
             </div>
             <div class="content">
                 <div class="text"><span tkey="paymentsDenomination">Denomination Unit</span></div>
-                <div class="value">{{ui.payments.denomation}}</div>
+                <div class="value">{{ui.payment.denomation}}</div>
             </div>
         </div>
     </div>
@@ -855,7 +855,7 @@ SRBMiner-MULTI.exe --algorithm panthera --pool {{ ui.start.host }}:{{ ui.start.p
             </div>
             <div class="content">
                 <div class="text"><span tkey="poolDonations">Donations Collected</span></div>
-                <div class="value">{{ui.payments.donations}}</div>
+                <div class="value">{{ui.payment.donations}}</div>
             </div>
         </div>
     </div>
@@ -867,7 +867,7 @@ SRBMiner-MULTI.exe --algorithm panthera --pool {{ ui.start.host }}:{{ ui.start.p
             </div>
             <div class="content">
                 <div class="text"><span tkey="poolContributions">Pool Fees</span></div>
-                <div class="value">{{ui.payments.fee}}</div>
+                <div class="value">{{ui.payment.fee}}</div>
             </div>
         </div>
     </div>
@@ -879,7 +879,7 @@ SRBMiner-MULTI.exe --algorithm panthera --pool {{ ui.start.host }}:{{ ui.start.p
             </div>
             <div class="content">
                 <div class="text"><span tkey="dynamicTransfer">Network Fee</span></div>
-                <div class="value">{{ui.payments.networkFee}}</div>
+                <div class="value">{{ui.payment.networkFee}}</div>
             </div>
         </div>
     </div>
@@ -901,7 +901,14 @@ SRBMiner-MULTI.exe --algorithm panthera --pool {{ ui.start.host }}:{{ ui.start.p
                 </tr>
                 </thead>
                 <tbody>
-        
+                        <tr v-for='payment in ui.payments'>
+                            <td>{{payment.time}}</td>
+                            <td v-html='payment.hash'></td>
+                            <td>{{payment.amount}}</td>
+                            <td>{{payment.fee}}</td>
+                            <td>{{payment.mixin}}</td>
+                            <td>{{payment.recipients}}</td>
+                        </tr>
                 </tbody>
             </table>
         </div>
@@ -933,7 +940,7 @@ SRBMiner-MULTI.exe --algorithm panthera --pool {{ ui.start.host }}:{{ ui.start.p
     <script src="https://unpkg.com/vue@3.2.31/dist/vue.global.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="js/common.js"></script>
-    <script src="js/script.php"></script>
+    <script src="js/script.js"></script>
     
     <script>
     </script>
