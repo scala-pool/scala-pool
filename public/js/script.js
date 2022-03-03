@@ -83,6 +83,7 @@ Vue.createApp({
         },
         payments:[]
       },
+      ranks: {},
       market:{
         symbols:[],
         charts : {},
@@ -115,7 +116,8 @@ Vue.createApp({
       gDifficulty:'',
       gAddress:'',
       holdUpdatePayments:false,
-      holdUpdateBlocks:false
+      holdUpdateBlocks:false,
+      rankNavigation:'none'
     }
   },
   methods: {
@@ -355,6 +357,9 @@ if(!this.holdUpdatePayments) {
 }
 
 
+      
+
+this.ranks = data.ranks;
     },
     setAddress : function(addr) {
       this.address = addr;
@@ -374,6 +379,9 @@ if(!this.holdUpdatePayments) {
       const self = this;
 
       switch(newPage) {
+        case 'ranks':
+        setBreadCrumbs(["Home", "Ranks"]);
+        break;
         case 'blocks':
         setBreadCrumbs(["Home", "Blocks"]);
         break;
@@ -660,7 +668,7 @@ new Chart(document.getElementById('chartMarket'), {
       if(!this.address) {
         this.address = window.localStorage.getItem(window.config.symbol +  ":address");
       }
-      const pages = ["index","blocks",'payments'];
+      const pages = ["index","blocks",'payments','ranks'];
       const hash = window.location.hash.replace("#","");
       this.setPage(hash && pages.indexOf(hash) >= 0 ? hash :'index');
     },
@@ -762,6 +770,17 @@ new Chart(document.getElementById('chartMarket'), {
 
 
         this.ui.start.login = login;
+      },
+      rankNavigation(newRank,oldRank) {
+        let i = 0;
+        this.ui.ranks = this.ranks[newRank].map(m => {
+          i++;
+          m.position = i;
+          m.donations = getReadableCoins(m.donations);
+          m.lastShare = moment(m.lastShare * 1000).fromNow();
+
+          return m;
+        });
       }
     },
     async mounted() {
@@ -773,7 +792,7 @@ new Chart(document.getElementById('chartMarket'), {
           self.init();
         }).catch(e => console.log(e));
       
-
+      this.rankNavigation = 'hashes';
       $('#hashrateCalculatorTrigger').on('click', () => $('#hashrateCalculatorTrigger > select').toggleClass('open'));
 
       window.addEventListener("hashchange", () => self.init());
