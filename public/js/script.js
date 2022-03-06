@@ -23,6 +23,31 @@ Vue.createApp({
       algos:["panthera"],
       ports:[],
       ui : {
+        workers:[],
+        worker:{
+            idx:0,
+            workerName:"x",
+            hashrate:"",
+            hashrate1h:"",
+            hashrate6h:"",
+            hashrate24h:"",
+            lastShare:"",
+            hashes:"",
+            status:"",
+            algo:""
+        },
+        user : {
+          current : "0 H/sec",
+          hr1 : "0 H/sec",
+          hr6 : "0 H/sec",
+          hr24 : "0 H/sec",
+          lastShare : "0 H/sec",
+          totalHashes : "0",
+          balance:"0 XLA",
+          paid:"0 XLA",
+          payoutLevel:"0 XLA",
+          payoutEstimate:"0 XLA"
+        },
         market: {
           price: 0,
           volume_24h: 0,
@@ -107,7 +132,7 @@ Vue.createApp({
         miners: 0,
         workers:0
       },
-      address: false,
+      address: "",
       height: 1,
       difficulty : 0,
       lastReward: 0,
@@ -117,10 +142,14 @@ Vue.createApp({
       gAddress:'',
       holdUpdatePayments:false,
       holdUpdateBlocks:false,
-      rankNavigation:'none'
+      rankNavigation:'none',
+      telegramLoginEnabled:false
     }
   },
   methods: {
+    workerView(idx) {
+      this.ui.worker = this.ui.workers[idx];
+    },
     loadMorePayments: function() {
       this.holdUpdatePayments = true;
     },
@@ -148,6 +177,7 @@ Vue.createApp({
         this.holdUpdatePayments = false;
         this.holdUpdateBlocks = false;
       }
+      const self = this;
       
 
 window.config = Object.assign(window.config, data.config);
@@ -238,7 +268,13 @@ const c1 = Chart.getChart("chartHashrates");
   }
 
   if(data.config && data.config.ports){
-    this.ports = data.config.ports;
+    this.ports = data.config.ports.map(port => {
+      port.difficulty = formatDifficulty(port.difficulty);
+      if(!port.algos) {
+        port.algos = self.algos .join("</br>");
+      }
+      return port;
+    });
   }
   this.ui.index.lastHash = data.lastblock.hash;
   this.ui.index.lastHashLink = getBlockchainUrl(data.lastblock.hash);
@@ -319,10 +355,36 @@ if(!this.holdUpdateBlocks) {
   }
   this.ui.block.averageIncomeDay = getReadableCoins(incomeValue/blockCount, 2, false);
   this.calcEarnRate = (incomeValue * 86400/ incomeHashes);//How much do we get per day / how much hash average perday
-  this.ui.block.averageBlockDay = formatDifficulty(blockCount/days.length, 2, false);
+}
+var labels = [];
+var values = [];
+var avgDay = 0;
+
+const c5 = Chart.getChart("blocksChartObj");
+if(c5) {
+    c5.data.labels = [];
+    c5.data.datasets[0].data = [];
+}
+for (var key in data.charts.blocks) {
+    var label = key;
+    if (chartDays && chartDays === 1) {
+        var keyParts = key.split(' ');
+        label = keyParts[1].replace(':00', '');
+    }
+    var value = data.charts.blocks[key];
+    avgDay+=value;
+    if(c5) {
+      label = label.split("-");
+      c5.data.labels.push([label[2],label[1],label[0].replace('20','')].join("/"));
+        c5.data.datasets[0].data.push(value);
+    }
 }
 
-
+avgDay = Math.round(avgDay / chartDays);
+this.ui.block.averageBlockDay = formatDifficulty(avgDay, 2, false);
+if(c5) {
+  c5.update();
+}
       
     this.ui.payment.payment_total = (data.pool.totalPayments || 0).toString();
     this.ui.payment.payment_miners = data.pool.totalMinersPaid.toString();
@@ -360,37 +422,248 @@ if(!this.holdUpdatePayments) {
       
 
 this.ranks = data.ranks;
-    },
-    setAddress : function(addr) {
-      this.address = addr;
+      
+if(data.miner) {
+    if(data.miner.error){
+        // $('#addressError').text(data.miner.error).show();
+        this.address = "";
+    } else {
+        //$('#addressError').hide();
+    }
+
+    if (data.miner.stats.lastShare) {
+        this.ui.user.lastShare = moment(parseInt(data.miner.stats.lastShare) * 1000).fromNow();
+    } else {
+        this.ui.user.lastShare = "Never";
+    }
+    this.ui.user.hashrate = (getReadableHashRateString(data.miner.stats.hashrate) || '0 H') + '/s';
+    if ('hashrate_1h' in data.miner.stats) {
+        this.ui.user.hashrate_1h = (getReadableHashRateString(data.miner.stats.hashrate_1h) || '0 H') + '/s';
+    }
+
+    if ('hashrate_6h' in data.miner.stats) {
+        this.ui.user.hashrate_6h = (getReadableHashRateString(data.miner.stats.hashrate_6h) || '0 H') + '/s';
+    }
+
+    if ('hashrate_24h' in data.miner.stats) {
+        this.ui.user.hashrate_24h = (getReadableHashRateString(data.miner.stats.hashrate_24h) || '0 H') + '/s';
+    }
+    this.ui.user.totalHashes = formatDifficulty(data.miner.stats.hashes || 0);
+    this.ui.user.paid = getReadableCoins(data.miner.stats.paid || 0);
+    this.ui.user.balance = getReadableCoins(data.miner.stats.balance || 0, 5);
+    this.ui.user.payoutLevel = getReadableCoins(data.miner.stats.minPayoutLevel || data.config.minPaymentThreshold);
+
+    var userRoundHashes = parseInt(data.miner.stats.roundHashes || 0);
+    var poolRoundHashes = parseInt(data.pool.roundHashes || 0);
+    var userRoundScore = parseFloat(data.miner.stats.roundScore || 0);
+    var poolRoundScore = parseFloat(data.pool.roundScore || 0);
+    var lastReward = parseFloat(data.lastblock.reward || 0);
+
+    var score_pct = (userRoundScore > 0) ? userRoundScore * 100 / poolRoundScore : 0;
+    var payoutEstimate = getReadableCoins(lastReward * score_pct,5,true);
+    if (data.config.devFee > 0) payoutEstimate = payoutEstimate - devFee;
+    if (data.config.networkFee > 0) payoutEstimate = payoutEstimate - devFee;
+    if (payoutEstimate < 0) payoutEstimate = 0;
+    this.ui.user.payoutEstimate = getReadableCoins(payoutEstimate,5);
+    this.ui.workers = [];
+    if(data.miner.workers) {
+        const workersData = data.miner.workers.sort((a,b) => {
+            var aH = a.hashrate;
+            var bH = b.hashrate; 
+            var aName = a.name.toLowerCase();
+            var bName = b.name.toLowerCase();
+            
+            if(aH > bH){
+                return -1;
+            }
+            if(aH < bH){
+                return 1;
+            }
+            if(aName > bName){
+                return 1;
+            }
+            if(aName < bName){
+                return -1;
+            }
+            return 0;
+        });
+        var have_avg_hr = false;
+
+        for (var i = 0; i < workersData.length; i++){
+            const worker = workersData[i];
+            var hashrate = getReadableHashRateString(worker.hashrate ? worker.hashrate : 0) + "/s";
+            var hashrate1h = getReadableHashRateString(worker.hashrate_1h || 0) + "/s";
+            var hashrate6h = getReadableHashRateString(worker.hashrate_6h || 0) + "/s";
+            var hashrate24h = getReadableHashRateString(worker.hashrate_24h || 0) + "/s";
+            var lastShare = worker.lastShare? moment(worker.lastShare * 1000).fromNow() : "Never";
+            var hashes = formatDifficulty(worker.hashes || 0);
+            var status = (worker.hashrate > 0);
+            var algo = worker.algo ? worker.algo : this.algos[0];
+            this.ui.workers.push({
+                idx:i,
+                workerName: worker.name ? worker.name : "x",
+                hashrate,
+                hashrate1h,
+                hashrate6h,
+                hashrate24h,
+                lastShare,
+                hashes,
+                status,
+                algo,
+                poolType:worker.pool_type,
+                block_count:worker.block_count,
+                donations:getReadableCoins(worker.donations)
+            })
+        }
+
+    }
+    
+
+
+}  else {
+    
+    this.ui.user.lastShare = "Never";
+    this.ui.user.hashrate = '0 H/s';
+    this.ui.user.hashrate_1h = '0 H/s';
+    this.ui.user.hashrate_6h = '0 H/s';
+    this.ui.user.hashrate_24h = '0 H/s';
+    this.ui.user.totalHashes = 0;
+    this.ui.user.paid = getReadableCoins(0);
+    this.ui.user.balance = getReadableCoins(0,9);
+    this.ui.user.payoutEstimate = getReadableCoins(0,5);
+    this.ui.workers = [];
+}
+
+
+
+// Get worker cells
+function getWorkerCells(worker){
+    var hashrate = worker.hashrate ? worker.hashrate : 0;
+    var hashrate1h = worker.hashrate_1h || 0;
+    var hashrate6h = worker.hashrate_6h || 0;
+    var hashrate24h = worker.hashrate_24h || 0;
+    var lastShare = worker.lastShare ? worker.lastShare : 0;
+    var hashes = (worker.hashes || 0).toString();
+    var status = (hashrate <= 0) ? 'error' : 'ok';
+    
+    return '<td class="col1" data-sort="' + status + '"><i class="fa fa-' + (status == 'ok' ? 'check status-ok' : 'times status-error') + '"></i></td>' +
+           '<td class="col2" data-sort="' + (worker.name != 'undefined' ? worker.name : '') + '">' + (worker.name != 'undefined' ? worker.name : '<em>Undefined</em>') + '</td>' +
+           '<td class="col3" data-sort="' + worker.error_count + '">' + worker.error_count + '</td>' +
+           '<td class="col3" data-sort="' + hashrate + '">' + getReadableHashRateString(hashrate) + '/s</td>' +
+           '<td class="col4 avghr" data-sort="' + hashrate1h + '">' + getReadableHashRateString(hashrate1h) + '/s</td>' +
+           '<td class="col5 avghr" data-sort="' + hashrate6h + '">' + getReadableHashRateString(hashrate6h) + '/s</td>' +
+           '<td class="col6 avghr" data-sort="' + hashrate24h + '">' + getReadableHashRateString(hashrate24h) + '/s</td>' +
+           '<td class="col8" data-sort="' + lastShare + '">' + (lastShare ? $.timeago(new Date(parseInt(lastShare) * 1000).toISOString()) : 'Never') + '</td>' +
+           '<td class="col9" data-sort="' + hashes + '">' + hashes + '</td>' +
+           '<td class="col10" data-sort="' + worker.donations + '">' + worker.donations + '</td>' +
+           '<td class="col10" data-sort="' + worker.block_count + '">' + worker.block_count + '</td>' +
+           '<td class="col11" data-sort="' + worker.pool_type + '">' + worker.pool_type + '</td>';
+           
+}
+
+// Handle sort on workers table
+
+// Sort workers
+function sortWorkers(a, b){
+    var aName = a.name.toLowerCase();
+    var bName = b.name.toLowerCase(); 
+    return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
+}
+
+// Render workers list
+function renderWorkers(workersData){
+    workersData = workersData.sort(sortWorkers);
+    
+    var $workersRows = $('#workersReport_rows');
+    
+    for (var i = 0; i < workersData.length; i++){
+        var existingRow = document.getElementById('workerRow_' + getWorkerRowId(workersData[i].name));
+        if (!existingRow){
+            $workersRows.empty();
+            break;
+        }
+    }
+
+    var have_avg_hr = false;
+
+    for (var i = 0; i < workersData.length; i++){
+        var worker = workersData[i];
+  if (Date.now()/1000 - parseInt(worker.lastShare) > 2 * 86400) continue;
+        if (!have_avg_hr && 'hashrate_1h' in worker) have_avg_hr = true;
+        var workerJson = JSON.stringify(worker);
+        var existingRow = document.getElementById('workerRow_' + getWorkerRowId(worker.name));    
+        if (existingRow && existingRow.getAttribute('data-json') !== workerJson){
+            $(existingRow).replaceWith(getWorkerRowElement(worker, workerJson));
+        }
+        else if (!existingRow){
+            var workerElement = getWorkerRowElement(worker, workerJson);
+            $workersRows.append(workerElement);
+        }
+    }
+
+    if (!have_avg_hr) $('#workersReport .avghr').hide();
+    else $('#workersReport .avghr').show();
+}
+// Update current pagec
+
+// routeApp = {
+//     destroy: function(){
+//         $('#yourLastShare').timeago('dispose');
+//         if (xhrAddressPoll) xhrAddressPoll.abort();
+//         if (addressTimeout) clearTimeout(addressTimeout);
+//         if (chartsInitialized) {
+//             chartsInitialized = false;
+//             clearInterval(intervalChartsUpdate);
+//         }
+//         if(fetchAddressTimeout){
+//          clearTimeout(fetchAddressTimeout);
+//         }
+        
+//     },
+//     update: function(){
+      
+//     },
+//     init:function(){
+//      address = getCurrentAddress();
+//      if(!address){
+//        return;
+//      }
+      
+//    fetchAddressStats(false);
+        
+//    $('#workersReport th.sort').on('click', sortTable);
+
+//    // Enable time ago on last submitted share
+//    $('#yourLastShare').timeago();
+//     }
+// };
     },
     offPage : function(oldPage) {
       switch(oldPage) {
-        case 'index':
+        case 'dashboard':
         Chart.getChart("chartHashrates").destroy();
         Chart.getChart("chartEfforts").destroy();
         Chart.getChart("chartMinerWorkers").destroy();
         Chart.getChart("chartMarket").destroy();
+        break;
+        case 'blocks':
+        Chart.getChart("blocksChartObj").destroy();
         break;
       }
 
     },
     onPage : async function(newPage) {
       const self = this;
-
-      switch(newPage) {
-        case 'ranks':
-        setBreadCrumbs(["Home", "Ranks"]);
-        break;
-        case 'blocks':
-        setBreadCrumbs(["Home", "Blocks"]);
-        break;
-        case 'payments':
-        setBreadCrumbs(["Home", "Payments"]);
-        break;
-        case 'index':
-        setBreadCrumbs(["Home", "Dashboard"]);
-
+      const np = newPage.toLowerCase();
+      if(!np.includes('user_')) {
+        setBreadCrumbs(["Home", np.charAt(0).toUpperCase() + np.slice(1)]);
+      } else {
+        const submodule = np.replace('user_','');
+        setBreadCrumbs(["Home", "User",submodule.charAt(0).toUpperCase() + submodule.slice(1)]);
+      }
+      
+      if(np === 'dashboard')
+      {
         await new Promise(resolve => {
           $(document).ready(() => {
             (() => {
@@ -661,16 +934,72 @@ new Chart(document.getElementById('chartMarket'), {
             resolve();
           });
         });
-        break;
+      } else if(np === 'blocks') {
+        await new Promise(resolve => {
+          $(document).ready(() => {
+            (() => {
+              
+
+new Chart(document.getElementById('blocksChartObj'), {
+    type: 'bar',
+    data: {
+        labels: [],
+        datasets: [{
+            label: 'Blocks',
+            data: [],
+            fill: false,
+            backgroundColor: 'rgba(3, 169, 244, .4)',
+            borderColor: '#03a9f4',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        legend: { display: false },
+        // scales: {
+        //     yAxes: [{
+        //         ticks: {
+        //             beginAtZero: true,
+        //             userCallback: function(label, index, labels) {
+        //                 if (Math.floor(label) === label) return label;
+        //             }
+        //         }
+        //     }],
+        // },
+        layout: {
+            padding: { top: 0, left: 0, right: 0, bottom: 0 }
+        }
+    }
+});
+            })();
+            resolve();
+          });
+        });
       }
+
+    },
+    getCurrentAddress() {
+        var urlWalletAddress = location.search.split('wallet=')[1] || 0;
+        var address = urlWalletAddress || docCookies.getItem(window.config.symbol.toLowerCase() + '_mining_address');
+        return address;
     },
     init:function() {
-      if(!this.address) {
-        this.address = window.localStorage.getItem(window.config.symbol +  ":address");
+      // if(this.address === null ||  this.address === "" || !this.address) {
+      //   const address = docCookies.getItem(window.config.symbol.toLowerCase() +  ":address");
+      //   if(address !== null &&  address !== "" && !address) {
+      //     this.address = address;
+      //   }
+      // }
+      this.address = this.getCurrentAddress();
+      const pages = ["dashboard","blocks",'payments','ranks','user',"user_payments","user_settings", "user_scores"];
+      const hash = window.location.hash.replace("#","").toLowerCase();
+      if(hash.includes('user')) {
+        this.setPage(hash && pages.indexOf(hash) >= 0 ? hash :'user');
+      } else {
+        this.setPage(hash && pages.indexOf(hash) >= 0 ? hash :'dashboard');
       }
-      const pages = ["index","blocks",'payments','ranks'];
-      const hash = window.location.hash.replace("#","");
-      this.setPage(hash && pages.indexOf(hash) >= 0 ? hash :'index');
+      
     },
     calculatorMultiplierSet:function(i) {
         var symbol = "";
@@ -721,7 +1050,18 @@ new Chart(document.getElementById('chartMarket'), {
 
       },
       address(newAddress, oldAddress) {
-        window.localStorage.setItem(window.config.symbol +  ":address", newAddress);
+
+        if(newAddress === oldAddress) return;
+        if(this.address === null || this.address === "" || !this.address) {
+          this.address = "";
+          docCookies.removeItem(window.config.symbol.toLowerCase() +  "_mining_address");
+          return "";
+        }
+        if(this.address !== this.getCurrentAddress()) {
+          docCookies.setItem(window.config.symbol.toLowerCase() +  "_mining_address", newAddress, Infinity);  
+        }
+        
+        return newAddress;
       },
       currentPage(newPage, oldPage) {
         if(newPage === oldPage) return;
@@ -781,27 +1121,52 @@ new Chart(document.getElementById('chartMarket'), {
 
           return m;
         });
-      }
+      },
+      
     },
     async mounted() {
       const self = this;
-      const endPoint = window.config.api;
-      await fetch(endPoint).then(async response => {
+
+
+      var originalEndPoint = window.config.api;
+      await fetch(originalEndPoint).then(async response => {
           var data = await response.json();
           self.update(data);
           self.init();
         }).catch(e => console.log(e));
+      originalEndPoint+= originalEndPoint.includes("?") ? "&" : "?";
+      originalEndPoint+="longpoll=true";
+      self.rankNavigation = 'hashes';
       
-      this.rankNavigation = 'hashes';
       $('#hashrateCalculatorTrigger').on('click', () => $('#hashrateCalculatorTrigger > select').toggleClass('open'));
 
       window.addEventListener("hashchange", () => self.init());
-      setInterval(async () => {
-        await fetch(endPoint).then(async response => {
-          var data = await response.json();
-          self.update(data);
-        }).catch(e => console.log(e));
-      },10000);
+
+
+      const sleepAsync = async () => await new Promise(resolve => {
+          setTimeout(async () => {
+            resolve(true);
+          },10000);
+      });
+
+      const syncStatus = async () => {
+        while(true) {
+          await sleepAsync();
+          var endPoint = originalEndPoint;
+          const address = self.getCurrentAddress();
+          if(address !== null &&  address !== "" && address !== false) {
+            endPoint = originalEndPoint + "&wallet=" + address;
+          }
+          await fetch(endPoint).then(async response => {
+            var data = await response.json();
+            self.update(data);
+          }).catch(e => console.log(e));
+
+        }
+      };
+
+      syncStatus();
+      
     }
   }).mount('#app');
 
