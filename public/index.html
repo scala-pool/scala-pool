@@ -60,17 +60,12 @@
   <link rel="icon" type="image/jpeg" sizes="16x16" href="./img/logo-large.jpeg">
 
 
-    <!-- <meta name="theme-color" content="#ffffff"> -->
-    <!-- Vendors styles-->
-    <link rel="stylesheet" href="vendors/simplebar/css/simplebar.css">
-    <link rel="stylesheet" href="css/vendors/simplebar.css">
-    <!-- Main styles for this application-->
-    <link href="css/style.css" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
-    <link href="vendors/@coreui/chartjs/css/coreui-chartjs.css" rel="stylesheet">
+    <link href="css/bundle.css" rel="stylesheet">
   </head>
   <body>
-        <div class="wrapper d-flex flex-column min-vh-100 bg-darkest">
+
+    <div class="wrapper d-flex flex-column min-vh-100 bg-darkest">
       <header class="header header-sticky mb-4">
   <div class="container">
 
@@ -506,7 +501,7 @@ SRBMiner-MULTI.exe --algorithm panthera --pool {{ ui.start.host }}:{{ ui.start.p
   <!-- Statistics -->
   <div class="row mb-2">
     <div class='col-lg-4 d-lg-block d-md-none d-sm-none d-xs-none'>
-      
+
 
       <nav>
         <div class="nav nav-tabs mb-3" id="nav-tab" role="tablist">
@@ -923,22 +918,22 @@ SRBMiner-MULTI.exe --algorithm panthera --pool {{ ui.start.host }}:{{ ui.start.p
     </div>
     
 
-  <div class='col-12'>
-    <!-- Report -->
-    <div class="card push-up-10">
-        <div id="paymentsReport" class="table-responsive">
-            <table class="table table-hover table-striped">
-                <thead>
-                <tr>
-                    <th class="col1"><span tkey="timeSent">Time Sent</span></th>
-                    <th class="col2"><span tkey="transactionHash">Transaction Hash</span></th>
-                    <th class="col3"><span tkey="amount">Amount</span></th>
-                    <th class="col4"><span tkey="fee">Fee</span></th>
-                    <th class="col5"><span tkey="mixin">Mixin</span></th>
-                    <th class="col6"><span tkey="payees">Payees</span></th>
-                </tr>
-                </thead>
-                <tbody>
+	<div class='col-12'>
+		<!-- Report -->
+		<div class="card push-up-10">
+		    <div id="paymentsReport" class="table-responsive">
+		        <table class="table table-hover table-striped">
+		            <thead>
+		            <tr>
+		                <th class="col1"><span tkey="timeSent">Time Sent</span></th>
+		                <th class="col2"><span tkey="transactionHash">Transaction Hash</span></th>
+		                <th class="col3"><span tkey="amount">Amount</span></th>
+		                <th class="col4"><span tkey="fee">Fee</span></th>
+		                <th class="col5"><span tkey="mixin">Mixin</span></th>
+		                <th class="col6"><span tkey="payees">Payees</span></th>
+		            </tr>
+		            </thead>
+		            <tbody>
                         <tr v-for='payment in ui.payments'>
                             <td>{{payment.time}}</td>
                             <td v-html='payment.hash'></td>
@@ -947,14 +942,14 @@ SRBMiner-MULTI.exe --algorithm panthera --pool {{ ui.start.host }}:{{ ui.start.p
                             <td>{{payment.mixin}}</td>
                             <td>{{payment.recipients}}</td>
                         </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+		            </tbody>
+		        </table>
+		    </div>
+		</div>
  <p class="text-center">
         <button type="button" class="btn btn-dark" v-on:click='loadMorePayments'><span tkey="loadMore">Load More</span></button>
       </p>
-  </div>
+	</div>
 </div>
 
 
@@ -966,55 +961,55 @@ SRBMiner-MULTI.exe --algorithm panthera --pool {{ ui.start.host }}:{{ ui.start.p
 
 <div class="row">
 
-  <div class="col-12 card">
+	<div class="col-12 card">
 
 <ul class="nav nav-pills">
-    <li role="presentation">
-      <a class='user_navigate btn' :class='{active: rankNavigation === "hashes"}' v-on:click='rankNavigation="hashes"'>
-        <i class="fas fa-chart-bar"></i>&nbsp;
-        <span tkey="top10hashes">Top 25 Miners</span> (All Time)
-      </a>
-    </li>
-    <li role="presentation">
-    <a class='user_navigate btn' :class='{active: rankNavigation === "unblocker"}' v-on:click='rankNavigation="unblocker"'>
-        <i class="fas fa-money-bill-alt"></i>&nbsp;
-        <span tkey="top10unblocks">Top 25 Block Founders</span>
-      </a>  
-    </li>
-    <li role="presentation">
-    <a class='user_navigate btn' :class='{active: rankNavigation === "donate"}' v-on:click='rankNavigation="donate"'>
-        <i class="fas fa-futbol"></i>&nbsp;
-        <span tkey="top10donators">Top 25 donators</span>
-      </a>
-    </li>
-  </ul>
-  </div>
+	  <li role="presentation">
+	  	<a class='user_navigate btn' :class='{active: rankNavigation === "hashes"}' v-on:click='rankNavigation="hashes"'>
+	  		<i class="fas fa-chart-bar"></i>&nbsp;
+	  		<span tkey="top10hashes">Top Miners</span> (All Time)
+	  	</a>
+	  </li>
+	  <li role="presentation">
+		<a class='user_navigate btn' :class='{active: rankNavigation === "unblocker"}' v-on:click='rankNavigation="unblocker"'>
+	  		<i class="fas fa-money-bill-alt"></i>&nbsp;
+	  		<span tkey="top10unblocks">Top Block Founders</span>
+	  	</a>	
+	  </li>
+	  <li role="presentation">
+		<a class='user_navigate btn' :class='{active: rankNavigation === "donate"}' v-on:click='rankNavigation="donate"'>
+	  		<i class="fas fa-futbol"></i>&nbsp;
+	  		<span tkey="top10donators">Top donators</span>
+	  	</a>
+	  </li>
+	</ul>
+	</div>
 
-  <div class='col-md-12 card' id='tabTopHashes'>
-          <table class="table table-striped table-responsive">
-              <thead>
-              <tr>
-                  <th class="text-center">#</th>
-                  <th class="text-center"><span tkey="miner">Miner</span></th>
-                  <th class="text-center"><span tkey="hashes">Hashes</span></th>
-                  <th class="text-center"><span tkey="shares">Last Share Submitted</span></th>
-                  <th class="text-center"><span tkey="donations">Donations</span></th>
-                  <th class="text-center"><span tkey="totalBlocks">Total Blocks</span></th>
+	<div class='col-md-12 card' id='tabTopHashes'>
+	        <table class="table table-striped table-responsive">
+	            <thead>
+	            <tr>
+	                <th class="text-center">#</th>
+	                <th class="text-center"><span tkey="miner">Miner</span></th>
+	                <th class="text-center"><span tkey="hashes">Hashes</span></th>
+	                <th class="text-center"><span tkey="shares">Last Share Submitted</span></th>
+	                <th class="text-center"><span tkey="donations">Donations</span></th>
+	                <th class="text-center"><span tkey="totalBlocks">Total Blocks</span></th>
 
-              </tr>
-              </thead>
-              <tbody>
-                <tr v-for='table in ui.ranks'>
-                   <td class="col1 text-center" > {{ table.position }} </td>
-                 <td class="col2 text-center" > {{ table.miner }} </td>
-                 <td class="col4 text-center" > {{ table.hashes }} </td>
-                 <td class="col5 text-center" > {{ table.lastShare }} </td>
-                 <td class="col6 text-center" > {{ table.donations }} </td>
-                 <td class="col8 text-center" > {{ table.blocksFound }} </td>
-             </tr>
-              </tbody>
-          </table>
-  </div>
+	            </tr>
+	            </thead>
+	            <tbody>
+	            	<tr v-for='table in ui.ranks'>
+		               <td class="col1 text-center" > {{ table.position }} </td>
+			           <td class="col2 text-center" > {{ table.miner }} </td>
+			           <td class="col4 text-center" > {{ table.hashes }} </td>
+			           <td class="col5 text-center" > {{ table.lastShare }} </td>
+			           <td class="col6 text-center" > {{ table.donations }} </td>
+			           <td class="col8 text-center" > {{ table.blocksFound }} </td>
+			       </tr>
+	            </tbody>
+	        </table>
+	</div>
 
 </div>
 </div>        </transition>  
@@ -1049,7 +1044,7 @@ SRBMiner-MULTI.exe --algorithm panthera --pool {{ ui.start.host }}:{{ ui.start.p
 </div>
 
 
-<div class="row" v-show='currentPage === "user_payments"'>
+<div class="row" v-if='currentPage === "user_payments" && address'>
   <div class="col-12">
     <div class="card-group d-block d-md-flex row">
       <div class="card mb-0 col-12">
@@ -1060,7 +1055,7 @@ SRBMiner-MULTI.exe --algorithm panthera --pool {{ ui.start.host }}:{{ ui.start.p
     </div>
   </div>
 </div>
-<div class="row" v-show='currentPage === "user_scores"'>
+<div class="row" v-if='currentPage === "user_scores" && address'>
   <div class="col-12">
     <div class="card-group d-block d-md-flex row">
       <div class="card mb-0 col-12">
@@ -1071,7 +1066,7 @@ SRBMiner-MULTI.exe --algorithm panthera --pool {{ ui.start.host }}:{{ ui.start.p
     </div>
   </div>
 </div>
-<div class="row" v-show='currentPage === "user_settings"'>
+<div class="row" v-if='currentPage === "user_settings" && address'>
   <div class="col-12">
     <div class="card-group d-block d-md-flex row">
       <div class="card mb-0 col-12">
@@ -1082,191 +1077,191 @@ SRBMiner-MULTI.exe --algorithm panthera --pool {{ ui.start.host }}:{{ ui.start.p
     </div>
   </div>
 </div>
-<div class="row" v-show='currentPage === "user"'>
+<div class="row" v-if='currentPage === "user" && address'>
    <div class="col-12 mb-2">
     <h1 class="text-white">User Dashboard</h1>
  </div>
 
 <div class="col-12 mb-2">
-  <div class="card" style="--cui-card-cap-bg: #3b5998">
-    <div class="card-body row text-center">
-      <div class="col">
-        <div class="fs-5 fw-semibold">{{ui.user.lastShare}}</div>
-        <div class="text-uppercase text-medium-emphasis small">Last Shares</div>
-      </div>
-      <div class="vr"></div>
-      <div class="col">
-        <div class="fs-5 fw-semibold">{{ui.user.totalHashes}}</div>
-        <div class="text-uppercase text-medium-emphasis small">Total Hashes</div>
-      </div>
-      
-    </div>
-    <div class="card-body row text-center">
-      <hr/>
-    </div>
-    <div class="card-body row text-center">
-      <div class="col">
-        <div class="fs-5 fw-semibold">{{ui.user.balance}}</div>
-        <div class="text-uppercase text-medium-emphasis small">Unpaid Balance</div>
-      </div>
-      <div class="vr"></div>
-      <div class="col">
-        <div class="fs-5 fw-semibold">{{ui.user.paid}}</div>
-        <div class="text-uppercase text-medium-emphasis small">Paid</div>
-      </div>
-    </div>
-  </div>
+	<div class="card" style="--cui-card-cap-bg: #3b5998">
+		<div class="card-body row text-center">
+			<div class="col">
+				<div class="fs-5 fw-semibold">{{ui.user.lastShare}}</div>
+				<div class="text-uppercase text-medium-emphasis small">Last Shares</div>
+			</div>
+			<div class="vr"></div>
+			<div class="col">
+				<div class="fs-5 fw-semibold">{{ui.user.totalHashes}}</div>
+				<div class="text-uppercase text-medium-emphasis small">Total Hashes</div>
+			</div>
+			
+		</div>
+		<div class="card-body row text-center">
+			<hr/>
+		</div>
+		<div class="card-body row text-center">
+			<div class="col">
+				<div class="fs-5 fw-semibold">{{ui.user.balance}}</div>
+				<div class="text-uppercase text-medium-emphasis small">Unpaid Balance</div>
+			</div>
+			<div class="vr"></div>
+			<div class="col">
+				<div class="fs-5 fw-semibold">{{ui.user.paid}}</div>
+				<div class="text-uppercase text-medium-emphasis small">Paid</div>
+			</div>
+		</div>
+	</div>
 </div>
 
-<div class="col-md-6 col-sm-12">
-  <div class="card" style="--cui-card-cap-bg: #3b5998">
-    <div class="card-header position-relative d-flex justify-content-center align-items-center">
-      <svg class="icon icon-3xl text-white my-4">
-        <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-speedometer"></use>
-      </svg>
-      <div class="chart-wrapper position-absolute top-0 start-0 w-100 h-100">
-        <canvas id="userHashrateChart" height="90"></canvas>
-      </div>
-    </div>
-    <div class="card-body row text-center">
-      <div class="col">
-        <div class="fs-5 fw-semibold">{{ui.user.hashrate}}</div>
-        <div class="text-uppercase text-medium-emphasis small">Current</div>
-      </div>
-      <div class="col">
-        <div class="fs-5 fw-semibold">{{ui.user.hashrate_1h}}</div>
-        <div class="text-uppercase text-medium-emphasis small">1 Hour</div>
-      </div>
-      <div class="vr"></div>
-      <div class="col">
-        <div class="fs-5 fw-semibold">{{ui.user.hashrate_6h}}</div>
-        <div class="text-uppercase text-medium-emphasis small">6 Hours</div>
-      </div>
-      <div class="vr"></div>
-      <div class="col">
-        <div class="fs-5 fw-semibold">{{ui.user.hashrate_24h}}</div>
-        <div class="text-uppercase text-medium-emphasis small">24 Hours</div>
-      </div>
-    </div>
-  </div>
+<div class="col-md-7 col-sm-12 mb-2">
+	<div class="card" style="--cui-card-cap-bg: #3b5998">
+		<div class="card-header position-relative d-flex justify-content-center align-items-center">
+			<svg class="icon icon-3xl text-white my-4">
+				<use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-speedometer"></use>
+			</svg>
+			<div class="chart-wrapper position-absolute top-0 start-0 w-100 h-100">
+				<canvas id="hashratesUserChart" height="90"></canvas>
+			</div>
+		</div>
+		<div class="card-body row text-center">
+			<div class="col">
+				<div class="fs-5 fw-semibold">{{ui.user.hashrate}}</div>
+				<div class="text-uppercase text-medium-emphasis small">Current</div>
+			</div>
+			<div class="col">
+				<div class="fs-5 fw-semibold">{{ui.user.hashrate_1h}}</div>
+				<div class="text-uppercase text-medium-emphasis small">1 Hour</div>
+			</div>
+			<div class="vr"></div>
+			<div class="col">
+				<div class="fs-5 fw-semibold">{{ui.user.hashrate_6h}}</div>
+				<div class="text-uppercase text-medium-emphasis small">6 Hours</div>
+			</div>
+			<div class="vr"></div>
+			<div class="col">
+				<div class="fs-5 fw-semibold">{{ui.user.hashrate_24h}}</div>
+				<div class="text-uppercase text-medium-emphasis small">24 Hours</div>
+			</div>
+		</div>
+	</div>
 </div>
 
-<div class="col-md-6 col-sm-12">
-  <div class="card" style="--cui-card-cap-bg: #41a14b">
-    <div class="card-header position-relative d-flex justify-content-center align-items-center">
-      <svg class="icon icon-3xl text-white my-4">
-        <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-cash"></use>
-      </svg>
-      <div class="chart-wrapper position-absolute top-0 start-0 w-100 h-100">
-        <canvas id="userPayoutChart" height="90"></canvas>
-      </div>
-    </div>
-    <div class="card-body row text-center">
-      <div class="col">
-        <div class="fs-5 fw-semibold">{{ui.user.payoutLevel}}</div>
-        <div class="text-uppercase text-medium-emphasis small">Payout Level</div>
-      </div>
-      <div class="vr"></div>
-      <div class="col">
-        <div class="fs-5 fw-semibold">{{ui.user.payoutEstimate}}</div>
-        <div class="text-uppercase text-medium-emphasis small">Props Payout Estimate</div>
-      </div>
-    </div>
-  </div>
+<div class="col-md-5 col-sm-12">
+	<div class="card" style="--cui-card-cap-bg: #59c364">
+		<div class="card-header position-relative d-flex justify-content-center align-items-center">
+			<svg class="icon icon-3xl text-white my-4">
+				<use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-cash"></use>
+			</svg>
+			<div class="chart-wrapper position-absolute top-0 start-0 w-100 h-100">
+				<canvas id="paymentsUserChart" height="90"></canvas>
+			</div>
+		</div>
+		<div class="card-body row text-center">
+			<div class="col">
+				<div class="fs-5 fw-semibold">{{ui.user.payoutLevel}}</div>
+				<div class="text-uppercase text-medium-emphasis small">Payout Level</div>
+			</div>
+			<div class="vr"></div>
+			<div class="col">
+				<div class="fs-5 fw-semibold">{{ui.user.payoutEstimate}}</div>
+				<div class="text-uppercase text-medium-emphasis small">Props Estimate</div>
+			</div>
+		</div>
+	</div>
 </div>
 
-<div class="col-12 mt-3">
+<div class="col-12 mt-2">
     <h2 class="text-white">Workers Statistics</h2>
 </div>
 
 <div class="col-12">
 
-  <div class="card">
-    <div class="table-responsive">
-      <table class="table table-hover table-striped">
-        <thead>
-          <tr>
-            <th class="text-center" style="width:10px;"><span tkey="status">Status</span></th>
-            <th><span tkey="workerName">Name</span></th>
-            <th class="text-right"><span tkey="hashRate">Hash Rate</span></th>
-            <th class="text-center"><span tkey="lastShare">Last Share</span></th>
-            <th class="text-center"><span tkey="lastShare">Total Hashes</span></th>
-            <th style="width: 10px;">&nbsp;</th>
+	<div class="card">
+		<div class="table-responsive">
+			<table class="table table-hover table-striped">
+				<thead>
+					<tr>
+						<th class="text-center" style="width:10px;"><span tkey="status">Status</span></th>
+						<th><span tkey="workerName">Name</span></th>
+						<th class="text-right"><span tkey="hashRate">Hash Rate</span></th>
+						<th class="text-center"><span tkey="lastShare">Last Share</span></th>
+						<th class="text-center"><span tkey="lastShare">Total Hashes</span></th>
+						<th style="width: 10px;">&nbsp;</th>
 
-            <!-- 
-            
-            
-            
-             -->
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="table in ui.workers">
-            <td class="text-center"><i class="fa" :class='{"fa-check text-success" : table.status === true,"fa-times text-danger" : table.status === false}'></i></td>
-                  <td class=""> {{ table.workerName }}</td>
-                  <td class="text-right"> {{ table.hashrate }}</td>
-                  <td class="text-center">{{ table.lastShare }}</td>
-                  <td class="text-center">{{ table.hashes }}</td>
+						<!-- 
+						
+						
+						
+						 -->
+					</tr>
+				</thead>
+				<tbody>
+					<tr v-for="table in ui.workers">
+						<td class="text-center"><i class="fa" :class='{"fa-check text-success" : table.status === true,"fa-times text-danger" : table.status === false}'></i></td>
+			           	<td class=""> {{ table.workerName }}</td>
+			           	<td class="text-right"> {{ table.hashrate }}</td>
+			           	<td class="text-center">{{ table.lastShare }}</td>
+			           	<td class="text-center">{{ table.hashes }}</td>
 
-                  <td>
-                      <div class="dropdown">
-                        <button class="btn btn-transparent" type="button" data-coreui-toggle="modal" data-coreui-target="#workerViewModal" v-on:click='workerView(table.idx)'>
-                          <svg class="icon">
-                            <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-options"></use>
-                          </svg>
-                        </button>
-                      </div>
-                    </td>
-               </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+			           	<td>
+	                    <div class="dropdown">
+	                      <button class="btn btn-transparent" type="button" data-coreui-toggle="modal" data-coreui-target="#workerViewModal" v-on:click='workerView(table.idx)'>
+	                        <svg class="icon">
+	                          <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-options"></use>
+	                        </svg>
+	                      </button>
+	                    </div>
+	                  </td>
+		           </tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
 </div>
 
 <div class="modal fade" id="workerViewModal" tabindex="-1" aria-labelledby="workerViewModal" aria-hidden="true">
   <div class="modal-dialog modal-fullscreen-sm-down">
-        <div class="modal-content">
+  	    <div class="modal-content">
 <div class="modal-header">
         <h5 class="modal-title" id="exampleModalCenterTitle">Miner Details</h5>
         <button class="btn-close" type="button" data-coreui-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-  <div class="table-responsive">
-      <table class="table table-hover table-striped">
-          <tr>
-            <th alt="Average hashrate over the last hour (only includes times the worker was active)"><span tkey="hashRate1h">HR (1h)</span></th>
-            <td>{{ ui.worker.hashrate1h }}</td>
-          </tr>
-          <tr>
-            <th alt="Average hashrate over the last six hours (only includes times the worker was active)"><span tkey="hashRate6h">HR (6h)</span></th>
-                  <td>{{ ui.worker.hashrate6h }}</td>
-          </tr>
-          <tr>
-            <th alt="Average hashrate over the last day (only includes times the worker was active)"><span tkey="hashRate24h">HR (24h)</span></th>
-            <td>{{ ui.worker.hashrate24h }}</td>
-          </tr>
-          <tr>
-            <th><span tkey="donations">Donations</span></th>
-            <td>{{ ui.worker.donations }}</td>
-          </tr>
-          <tr>
-            <th><span tkey="blockFound">Blocks</span></th>
-            <td>{{ ui.worker.block_count }}</td>
-          </tr>
-          <tr>
-            <th><span tkey="poolType">Share Type</span></th>
-            <td>{{ ui.worker.poolType }}</td>
-          </tr>
-          <tr>
-            <th><span tkey="poolType">Algorithm</span></th>
-            <td>{{ ui.worker.algo }}</td>
-          </tr>
-      </table>
-    </div>
-    </div>
-    </div>
-    </div>
+	<div class="table-responsive">
+			<table class="table table-hover table-striped">
+					<tr>
+						<th alt="Average hashrate over the last hour (only includes times the worker was active)"><span tkey="hashRate1h">HR (1h)</span></th>
+						<td>{{ ui.worker.hashrate1h }}</td>
+					</tr>
+					<tr>
+						<th alt="Average hashrate over the last six hours (only includes times the worker was active)"><span tkey="hashRate6h">HR (6h)</span></th>
+			           	<td>{{ ui.worker.hashrate6h }}</td>
+					</tr>
+					<tr>
+						<th alt="Average hashrate over the last day (only includes times the worker was active)"><span tkey="hashRate24h">HR (24h)</span></th>
+						<td>{{ ui.worker.hashrate24h }}</td>
+					</tr>
+					<tr>
+						<th><span tkey="donations">Donations</span></th>
+						<td>{{ ui.worker.donations }}</td>
+					</tr>
+					<tr>
+						<th><span tkey="blockFound">Blocks</span></th>
+						<td>{{ ui.worker.block_count }}</td>
+					</tr>
+					<tr>
+						<th><span tkey="poolType">Share Type</span></th>
+						<td>{{ ui.worker.poolType }}</td>
+					</tr>
+					<tr>
+						<th><span tkey="poolType">Algorithm</span></th>
+						<td>{{ ui.worker.algo }}</td>
+					</tr>
+			</table>
+		</div>
+		</div>
+		</div>
+		</div>
 </div>
 
 
@@ -1281,12 +1276,11 @@ SRBMiner-MULTI.exe --algorithm panthera --pool {{ ui.start.host }}:{{ ui.start.p
     <script src="vendors/simplebar/js/simplebar.min.js"></script>
     <!-- Plugins and scripts required by this view-->
     <script src="vendors/chart.js/js/chart.min.js"></script>
-    <script src="vendors/@coreui/chartjs/js/coreui-chartjs.js"></script>
-    <script src="vendors/@coreui/utils/js/coreui-utils.js"></script>
+    <script src="vendors/@coreui/chartjs/js/coreui-chartjs.min.js"></script>
+    <script src="vendors/@coreui/utils/js/coreui-utils.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://unpkg.com/vue@3.2.31/dist/vue.global.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="js/common.js"></script>
     <script src="js/script.js"></script>
     <script async src="https://telegram.org/js/telegram-widget.js?16" data-telegram-login="ScalaWalletBot" data-size="large" data-onauth="onTelegramAuth(user)" data-request-access="write"></script>
 <script type="text/javascript">
