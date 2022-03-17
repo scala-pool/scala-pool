@@ -27,18 +27,30 @@ Usage
 	nvm alias default 14
 	nvm use default
 ```
+   * For FreeBSD: 
+```
+	sudo pkg update
+	sudo pkg install openssl-devel bash sudo cmake node npm
+```
 * [Redis](http://redis.io/) key-value store v2.6+ 
   * For Ubuntu: 
 ```
 	sudo add-apt-repository ppa:chris-lea/redis-server
 	sudo apt-get update
 	sudo apt-get install redis-server
- ```
+```
+   * For FreeBSD: 
+```
+	sudo pkg update
+	sudo pkg install redis
+```
 * libssl required for the hashing module
   * For Ubuntu: `sudo apt-get install libssl-dev`
-
+  * For FreeBSD: `sudo pkg install openssl-devel` --> Fix libraries if error [libcrypto](https://www.freebsd.org/security/advisories/FreeBSD-EN-21:24.libcrypto.asc)
+ 
 * Boost is required for the cryptoforknote-util module
   * For Ubuntu: `sudo apt-get install libboost-all-dev`
+  * For FreeBSD: `sudo pkg install boost-all`
 
 
 [**Redis warning**](http://redis.io/topics/security): It'sa good idea to learn about and understand software that
@@ -63,7 +75,10 @@ Clone the repository and run `npm update` for all the dependencies to be install
 	cd pool
 	npm install
 ```
-
+On FeeBSD: if get error with node-cryptoforknote-util need fix permissions in folder 'node_modules' from project root for some reason need to set permissions again.
+```bash
+sudo chmod a+w node_modules -R 
+```
 #### 2) Configuration
 
 Copy the `default/config.default.json` file of your choice to `config.json` then overview each options and change any to match your preferred setup. To see avaliable config go to [table](config.md). Configuration now can be setup via CLI. To see cli usages go to [cli docs](cli.md)
